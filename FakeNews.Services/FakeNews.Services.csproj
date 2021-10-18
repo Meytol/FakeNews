@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+	  <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HtmlSanitizer" Version="6.0.441" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FakeNews.Common\FakeNews.Common.csproj" />
+    <ProjectReference Include="..\FakeNews.Database\FakeNews.Database.csproj" />
+  </ItemGroup>
+
+</Project>

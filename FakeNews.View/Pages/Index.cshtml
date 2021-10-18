@@ -1,0 +1,186 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="row mb-4">
+    <div class="col col-6 ">
+        <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+            <!-- Carousel indicators -->
+            <ol class="carousel-indicators">
+
+                @for (int i = 0; i < Model.RecentNews.Count(); i++)
+                {
+                    <li data-bs-target="#myCarousel" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "") bg-dark" ></li>
+                }
+            </ol>
+
+            <!-- Wrapper for carousel items -->
+            <div class="carousel-inner" style="height: 100%">
+                @for (int i = 0; i < Model.RecentNews.Count(); i++)
+                {
+                    var item = @Model.RecentNews.ElementAt(i);
+                    <div class="carousel-item @(i == 0 ? "active" : "") ">
+                        <div class="card">
+                            <img src="@item.MainImageUri" class="card-img-top" alt="@item.Keywords">
+                            <div class="card-body">
+                                <h3 class="card-title">
+                                    @item.Title
+                                </h3>
+                                <h5 class="card-subtitle mb-2 text-muted">
+                                    <span>
+                                        دسته بندی:
+                                        @foreach (var category in item.NewsCategories.Select(i => i.Category).Distinct())
+                                        {
+                                            <a href="/NewsCategory?catId=@category.Id" class="link-info">
+                                                @category.TitleFa
+                                            </a>
+                                        }
+                                    </span>
+                                </h5>
+                                <p class="card-text">
+                                    @item.HeadLine
+                                </p>
+                                <a href="/News?id=@item.Id" class="btn btn-primary">ادامه خبر </a>
+
+                                <p class="card-text">
+                                    <small class="text-muted">
+                                        <span>
+                                            نوشته شده توسط
+                                            @item.Author.UserName
+                                        </span>
+                                        <br />
+                                        @{
+                                            var differceTime = (DateTime.Now - item.PublishDate);
+                                            if (differceTime.TotalMinutes < 60)
+                                            {
+                                                <span>
+                                                    @((int)differceTime.TotalMinutes)
+                                                    دقیقه قبل
+                                                </span>
+                                            }
+                                            else if (differceTime.TotalHours < 24)
+                                            {
+                                                <span>
+                                                    @((int)differceTime.TotalHours)
+                                                    ساعت قبل
+                                                </span>
+                                            }
+                                            else if (differceTime.TotalDays < 30)
+                                            {
+                                    <span>
+                                        @((int)differceTime.TotalDays)
+                                        روز قبل
+                                    </span>
+                                            }
+                                            else if (differceTime.TotalDays < 365)
+                                            {
+                                    <span>
+                                        @((int)differceTime.TotalDays % 30)
+                                        ماه قبل
+                                    </span>
+                                            }
+                                            else
+                                            {
+                                    <span>
+                                        @((int)differceTime.TotalDays % 365)
+                                        سال قبل
+                                    </span>
+                                            }
+                                        }
+                                    </small>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+
+            </div>
+
+            <!-- Carousel controls -->
+            <a class="carousel-control-prev mt-auto mb-auto" href="#myCarousel" data-bs-slide="prev" style="height: 25%">
+                <span class="carousel-control-prev-icon bg-dark"></span>
+            </a>
+            <a class="carousel-control-next mt-auto mb-auto" href="#myCarousel" data-bs-slide="next" style="height: 25%">
+                <span class="carousel-control-next-icon bg-dark "></span>
+            </a>
+        </div>
+    </div>
+    <div class="col col-6">
+        <div class="row">
+            @foreach (var item in Model.RecentNews.Take(4))
+            {
+                <div class="col col-6">
+                    <div class="card mb-1">
+                        <img src="@item.MainImageUri" class="card-img-top" alt="@item.Keywords">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                @item.Title
+                            </h5>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                <span>
+                                    دسته بندی: 
+                                    @foreach (var category in item.NewsCategories.Select(i => i.Category).Distinct())
+                                    {
+                                        <a href="/NewsCategory?catId=@category.Id" class="link-info">
+                                            @category.TitleFa
+                                        </a>
+                                    }
+                                </span>
+                            </h6>
+                            <p class="card-text">
+                                @item.HeadLine
+                            </p>
+                            <a href="/News?id=@item.Id" class="btn btn-primary">ادامه خبر</a>
+
+
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+    <ul class="nav nav-pills justify-content-center">
+
+        @{
+            foreach (var mainCategory in Model.TreeviewCategories)
+            {
+                if (mainCategory.ChildCategories == null || mainCategory.ChildCategories.Any() is false)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" href="/NewsCategory?catId=@mainCategory.Id">
+                            @mainCategory.TitleFa
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" href="/NewsCategory?catId=@mainCategory.Id">
+                            @mainCategory.TitleFa
+                        </a>
+                        <ul class="dropdown-menu">
+
+                            @foreach (var subCategory in mainCategory.ChildCategories)
+                            {
+                                <li>
+                                    <a class="dropdown-item" href="/NewsCategory?catId=@subCategory.Id">
+                                        @subCategory.TitleFa
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                }
+            }
+        }
+    </ul>
+</div>
+
+

@@ -1,0 +1,49 @@
+﻿@page
+@model FakeNews.View.Pages.NewsModel
+@{
+    Html.SetSeoInfo(seoInfo =>
+    {
+        seoInfo.SetArticleInfo(
+            authorName: Model.DesiredNews.Author.UserName,
+            publishDate: Model.DesiredNews.PublishDate,
+            authorUrl: "/NewsCategory?catId=" + Model.DesiredNews.Author.PublicId,  //optional
+            section: string.Join(", ", Model.DesiredNews.NewsCategories.Select(i => i.Category).Distinct().ToList())
+        ) ;
+    });
+}
+<div class="col col-9">
+    <div class="row"><img src="@Model.DesiredNews.MainImageUri" alt="@Model.DesiredNews.Keywords" /></div>
+    <div class="row">
+        <h1>
+            @Model.DesiredNews.Title
+        </h1>
+        <h2>
+            @Model.DesiredNews.HeadLine
+        </h2>
+        <h3>
+            @Model.DesiredNews.Author.UserName
+        </h3>
+        <h4>
+            <span>
+                دسته بندی:
+                @foreach (var category in Model.DesiredNews.NewsCategories.Select(i => i.Category).Distinct())
+                {
+                    <a href="/NewsCategory?catId=@category.Id" class="link-info">
+                        @category.TitleFa
+                    </a>
+                }
+            </span> 
+        </h4>
+        <h5>
+            @{new MD.PersianDateTime.PersianDateTime(Model.DesiredNews.PublishDate).ToString("yyyy/MMMM/dd");}
+        </h5>
+        <article>
+            @Html.Raw(Model.DesiredNews.Body)
+        </article>
+
+    </div>
+</div>
+<div class="col col-3">
+    <div class="col col-12"></div>
+    <div class="col col-12"></div>
+</div>
