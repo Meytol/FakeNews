@@ -23,7 +23,7 @@ namespace FakeNews.Database.Config
             Roles = applicationDbContext.Roles.ToListAsync().Result ?? new List<Role>();
             Roles = applicationDbContext.Roles.ToListAsync().Result ?? new List<Role>();
             UserRoles = applicationDbContext.UserRoles.ToListAsync().Result ?? new List<IdentityUserRole<int>>();
-
+            NewsUserSeens = applicationDbContext.NewsUserSeens.ToListAsync().Result ?? new List<NewsUserSeen>();
 
             foreach (var news in News)
             {
