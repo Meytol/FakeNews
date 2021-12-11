@@ -23,7 +23,7 @@
                     var item = @Model.RecentNews.ElementAt(i);
                     <div class="carousel-item @(i == 0 ? "active" : "") ">
                         <div class="card">
-                            <img src="@item.MainImageUri" class="card-img-top" alt="@item.Keywords">
+                            <img src="@item.MainImageUri" class="card-img-top" alt="@item.Keywords" style="width: auto; height: 450px">
                             <div class="card-body">
                                 <h3 class="card-title">
                                     @item.Title
@@ -33,14 +33,20 @@
                                         دسته بندی:
                                         @foreach (var category in item.NewsCategories.Select(i => i.Category).Distinct())
                                         {
-                                            <a href="/NewsCategory?catId=@category.Id" class="link-info">
+                                            <a href="/Category?catId=@category.Id" class="link-info">
                                                 @category.TitleFa
                                             </a>
                                         }
                                     </span>
                                 </h5>
                                 <p class="card-text">
-                                    @item.HeadLine
+                                    @{
+                                    var headLine = item.HeadLine.Length > 80
+                 ? item.HeadLine.Substring(item.HeadLine.Substring(0, 80).IndexOf(" ") + 1, 80) + "..."
+                 : item.HeadLine;
+                 }
+                                    
+                                    @headLine
                                 </p>
                                 <a href="/News?id=@item.Id" class="btn btn-primary">ادامه خبر </a>
 
@@ -114,7 +120,7 @@
             {
                 <div class="col col-6">
                     <div class="card mb-1">
-                        <img src="@item.MainImageUri" class="card-img-top" alt="@item.Keywords">
+                        <img src="@item.MainImageUri" class="card-img-top" alt="@item.Keywords" style="width: 300px; height: 150px">
                         <div class="card-body">
                             <h5 class="card-title">
                                 @item.Title
@@ -124,14 +130,22 @@
                                     دسته بندی: 
                                     @foreach (var category in item.NewsCategories.Select(i => i.Category).Distinct())
                                     {
-                                        <a href="/NewsCategory?catId=@category.Id" class="link-info">
+                                        <a href="/Category?catId=@category.Id" class="link-info">
                                             @category.TitleFa
                                         </a>
                                     }
                                 </span>
                             </h6>
                             <p class="card-text">
-                                @item.HeadLine
+                                @{
+                                    var headLine = item.HeadLine.Length > 50
+                 ? item.HeadLine.Substring(item.HeadLine.Substring(0, 50).IndexOf(" "), 50) + "..."
+                 : item.HeadLine;
+                 }
+                                    
+                                    @headLine
+                                    
+                                
                             </p>
                             <a href="/News?id=@item.Id" class="btn btn-primary">ادامه خبر</a>
 
@@ -154,7 +168,7 @@
                 if (mainCategory.ChildCategories == null || mainCategory.ChildCategories.Any() is false)
                 {
                     <li class="nav-item">
-                        <a class="nav-link" href="/NewsCategory?catId=@mainCategory.Id">
+                        <a class="nav-link" href="/Category?catId=@mainCategory.Id">
                             @mainCategory.TitleFa
                         </a>
                     </li>
@@ -162,7 +176,7 @@
                 else
                 {
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" href="/NewsCategory?catId=@mainCategory.Id">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" href="/Category?catId=@mainCategory.Id">
                             @mainCategory.TitleFa
                         </a>
                         <ul class="dropdown-menu">
@@ -170,7 +184,7 @@
                             @foreach (var subCategory in mainCategory.ChildCategories)
                             {
                                 <li>
-                                    <a class="dropdown-item" href="/NewsCategory?catId=@subCategory.Id">
+                                    <a class="dropdown-item" href="/Category?catId=@subCategory.Id">
                                         @subCategory.TitleFa
                                     </a>
                                 </li>

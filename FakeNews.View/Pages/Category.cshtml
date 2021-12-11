@@ -1,0 +1,62 @@
+﻿@page
+@model FakeNews.View.Pages.CategoryModel
+@{
+}
+
+<div class="row mb-4">
+    @{
+        foreach (var cat in Model.ChildCategories)
+        {
+            <div class="col col-2 ml-2 mr-2">
+                <lable>
+                    @cat.TitleFa
+                </lable>
+            </div>
+        }
+    }
+</div>
+
+<hr />
+
+<div class="row mt-4">
+    @{
+        @foreach (var item in Model.CategoryNews)
+            {
+                <div class="col col-6">
+                    <div class="card mb-1">
+                        <img src="@item.MainImageUri" class="card-img-top" alt="@item.Keywords" style="width: 300px; height: 150px">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                @item.Title
+                            </h5>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                <span>
+                                    دسته بندی: 
+                                    @foreach (var category in item.NewsCategories.Select(i => i.Category).Distinct())
+                                    {
+                                        <a href="/NewsCategory?catId=@category.Id" class="link-info">
+                                            @category.TitleFa
+                                        </a>
+                                    }
+                                </span>
+                            </h6>
+                            <p class="card-text">
+                                @{
+                                    var headLine = item.HeadLine.Length > 50
+                 ? item.HeadLine.Substring(item.HeadLine.Substring(0, 50).IndexOf(" "), 50) + "..."
+                 : item.HeadLine;
+                 }
+                                    
+                                    @headLine
+                                    
+                                
+                            </p>
+                            <a href="/News?id=@item.Id" class="btn btn-primary">ادامه خبر</a>
+
+
+                        </div>
+                    </div>
+                </div>
+            }
+    }
+</div>
