@@ -11,7 +11,7 @@ namespace FakeNews.Database.Tables
         public string Title { get; set; }
         public string HeadLine { get; set; }
         public string Body { get; set; }
-        public DateTime PublishDate { get; set; }
+        public DateTime PublishDate { get; set; } = new DateTime();
         public string Keywords { get; set; }
         public bool IsPublished => PublishDate > DateTime.Now && IsDeleted == false;
         public int SeenCount { get; set; }
@@ -20,6 +20,6 @@ namespace FakeNews.Database.Tables
         public User Author { get; set; }
 
 
-        public ICollection<NewsCategory> NewsCategories { get; set; }
+        public ICollection<NewsCategory> NewsCategories { get; set; } = new HashSet<NewsCategory>();
     }
 }

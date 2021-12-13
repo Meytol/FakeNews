@@ -12,7 +12,7 @@ namespace FakeNews.Database.Tables
         public Category ParentCategory { get; set; }
         public int? ParentCategoryId { get; set; }
 
-        public ICollection<Category> ChildCategories { get; set; }
-        public ICollection<NewsCategory> NewsCategories { get; set; }
+        public ICollection<Category> ChildCategories { get; set; } = new HashSet<Category>();
+        public ICollection<NewsCategory> NewsCategories { get; set; } = new HashSet<NewsCategory>();
     }
 }

@@ -7,10 +7,10 @@ namespace FakeNews.Database.Tables
     {
         public int Count { get; set; }
 
-        public User Viewer { get; set; }
+        public User Viewer { get; set; } = new User();
         public int ViewerId { get; set; }
 
-        public News News { get; set; }
+        public News News { get; set; } = new News();
         public int NewsId { get; set; }
     }
 }

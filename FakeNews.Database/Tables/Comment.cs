@@ -19,6 +19,6 @@ namespace FakeNews.Database.Tables
         public Comment ParentComment { get; set; }
         public int? ParentCommentId { get; set; }
 
-        public ICollection<Comment> ChildComments { get; set; }
+        public ICollection<Comment> ChildComments { get; set; } = new List<Comment>();
     }
 }
