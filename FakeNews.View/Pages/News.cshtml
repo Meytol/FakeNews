@@ -7,7 +7,7 @@
             authorName: Model.DesiredNews.Author.UserName,
             publishDate: Model.DesiredNews.PublishDate,
             authorUrl: "/NewsCategory?catId=" + Model.DesiredNews.Author.PublicId,  //optional
-            section: string.Join(", ", Model.DesiredNews.NewsCategories.Select(i => i.Category).Distinct().ToList())
+            section: Model.DesiredNews.Category.TitleFa
         ) ;
     });
 }
@@ -26,12 +26,9 @@
         <h4>
             <span>
                 دسته بندی:
-                @foreach (var category in Model.DesiredNews.NewsCategories.Select(i => i.Category).Distinct())
-                {
-                    <a href="/NewsCategory?catId=@category.Id" class="link-info">
-                        @category.TitleFa
+                    <a href="/NewsCategory?catId=@Model.DesiredNews.CategoryId" class="link-info">
+                        @Model.DesiredNews.Category
                     </a>
-                }
             </span> 
         </h4>
         <h5>

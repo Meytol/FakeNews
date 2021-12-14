@@ -13,6 +13,6 @@ namespace FakeNews.Database.Tables
         public int? ParentCategoryId { get; set; }
 
         public ICollection<Category> ChildCategories { get; set; } = new HashSet<Category>();
-        public ICollection<NewsCategory> NewsCategories { get; set; } = new HashSet<NewsCategory>();
+        public ICollection<News> News { get; set; } = new HashSet<News>();
     }
 }

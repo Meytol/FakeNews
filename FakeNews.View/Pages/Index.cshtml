@@ -18,6 +18,7 @@
 
             <!-- Wrapper for carousel items -->
             <div class="carousel-inner" style="height: 100%">
+
                 @for (int i = 0; i < Model.RecentNews.Count(); i++)
                 {
                     var item = @Model.RecentNews.ElementAt(i);
@@ -31,12 +32,9 @@
                                 <h5 class="card-subtitle mb-2 text-muted">
                                     <span>
                                         دسته بندی:
-                                        @foreach (var category in item.NewsCategories.Select(i => i.Category).Distinct())
-                                        {
-                                            <a href="/Category?catId=@category.Id" class="link-info">
-                                                @category.TitleFa
+                                            <a href="/Category?catId=@item.CategoryId" class="link-info">
+                                                @item.Category.TitleFa
                                             </a>
-                                        }
                                     </span>
                                 </h5>
                                 <p class="card-text">
@@ -128,12 +126,9 @@
                             <h6 class="card-subtitle mb-2 text-muted">
                                 <span>
                                     دسته بندی: 
-                                    @foreach (var category in item.NewsCategories.Select(i => i.Category).Distinct())
-                                    {
-                                        <a href="/Category?catId=@category.Id" class="link-info">
-                                            @category.TitleFa
+                                        <a href="/Category?catId=@item.CategoryId" class="link-info">
+                                            @item.Category.TitleFa
                                         </a>
-                                    }
                                 </span>
                             </h6>
                             <p class="card-text">

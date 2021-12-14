@@ -20,6 +20,7 @@ namespace FakeNews.Database.Tables
         public User Author { get; set; }
 
 
-        public ICollection<NewsCategory> NewsCategories { get; set; } = new HashSet<NewsCategory>();
+        public Category Category { get; set; }
+        public int CategoryId { get; set; }
     }
 }

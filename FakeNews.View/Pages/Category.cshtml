@@ -7,19 +7,28 @@
     <p>
         دسته بندی
         <strong>
-            @Model.CurrentCategory.TitleFa
+            @Model.CurrentCategory.TitleFa 
+            (
+                تعداد خبر: 
+                @Model.CategoryNews.Count()
+            )
         </strong>
     </p>
 </div>
 
 <div class="row mb-4">
+    <div class="col col-4 col-sm-3 col-md-3 col-lg-2 col-xl-2 xol-xxl-2">
+        <lable>
+            <strong>
+                زیر دسته بندی ها:
+            </strong>
+        </lable>
+    </div>
     @{
         foreach (var cat in Model.ChildCategories)
         {
-            <div class="col col-2 ml-2 mr-2">
-                <lable>
-                    @cat.TitleFa
-                </lable>
+            <div class="col col-3 col-sm-2 col-md-2 col-lg-2 col-xl-2 col-xxl-2">
+                <a href="/Category?catId=@cat.Id">@cat.TitleFa ,</a>
             </div>
         }
     }

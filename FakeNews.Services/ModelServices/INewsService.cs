@@ -45,8 +45,7 @@ namespace FakeNews.Services.ModelServices
                 .AsQueryable()
                 //.Where(e => e.IsPublished)
                 .Include(e => e.Author)
-                .Include(e => e.NewsCategories)
-                .ThenInclude(ie => ie.Category)
+                .Include(e => e.Category)
                 .OrderByDescending(e => e.PublishDate)
                 .Skip(pagingModel.Skip)
                 .Take(pagingModel.Take)
@@ -66,8 +65,7 @@ namespace FakeNews.Services.ModelServices
             var news = await _repository
                 .Where(e => e.Id == id)
                 .Include(e => e.Author)
-                .Include(e => e.NewsCategories)
-                .ThenInclude(ie => ie.Category)
+                .Include(ie => ie.Category)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
 

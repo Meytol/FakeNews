@@ -14,7 +14,6 @@ namespace FakeNews.Services.Helper
         {
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ICommentService, CommentService>();
-            services.AddScoped<INewsCategoryService, NewsCategoryService>();
             services.AddScoped<INewsService, NewsService>();
             services.AddScoped<INewsUserSeenService, NewsUserSeenService>();
             services.AddSingleton<HtmlSanitizer>(new HtmlSanitizer());

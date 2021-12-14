@@ -58,13 +58,9 @@ namespace FakeNews.Services.ModelServices
         public async Task<ServiceResponse<IList<News>>> GetNewsByCategoryId(int categoryId)
         {
             var categoryNewsList = await _repository.Where(category => category.Id == categoryId)
-                .Include(e => e.NewsCategories)
-                .ThenInclude(e => e.News)
-                .Include(e => e.NewsCategories)
-                .ThenInclude(e => e.News)
+                .Include(e => e.News)
                 .ThenInclude(e => e.Author)
-                .SelectMany(e => e.NewsCategories)
-                .Select(e => e.News)
+                .SelectMany(e => e.News)
                 .Distinct()
                 .AsNoTracking()
                 .ToListAsync();
