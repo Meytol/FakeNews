@@ -36,7 +36,7 @@ namespace FakeNews.View.Pages
                 RecentNews = getNewsResponse.Data;
             }
 
-            ServiceResponse<IEnumerable<Category>> getCategoriesResponse = await _categoryService.GetCategoriesTreeView();
+            ServiceResponse<IEnumerable<Category>> getCategoriesResponse = await _categoryService.GetCategoriesTreeView(parent: 1);
 
             if (getCategoriesResponse.IsSuccessful is true)
             {

@@ -40,7 +40,7 @@
                                 <p class="card-text">
                                     @{
                                     var headLine = item.HeadLine.Length > 80
-                 ? item.HeadLine.Substring(item.HeadLine.Substring(0, 80).IndexOf(" ") + 1, 80) + "..."
+                 ? item.HeadLine.Substring(0, item.HeadLine.Substring(0, 80).LastIndexOf(" ")) + "..."
                  : item.HeadLine;
                  }
                                     
@@ -134,7 +134,7 @@
                             <p class="card-text">
                                 @{
                                     var headLine = item.HeadLine.Length > 50
-                 ? item.HeadLine.Substring(item.HeadLine.Substring(0, 50).IndexOf(" "), 50) + "..."
+                 ? item.HeadLine.Substring(0, item.HeadLine.Substring(0, 50).LastIndexOf(" ")) + "..."
                  : item.HeadLine;
                  }
                                     
@@ -154,6 +154,7 @@
 
 </div>
 
+<hr />
 <div class="row" id="Categories">
     <ul class="nav nav-pills justify-content-center">
 
@@ -191,4 +192,5 @@
         }
     </ul>
 </div>
+<hr />
 

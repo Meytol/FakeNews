@@ -50,7 +50,7 @@
                         <p class="card-text">
                             @{
                                 var headLine = item.HeadLine.Length > 50
-                            ? item.HeadLine.Substring(item.HeadLine.Substring(0, 50).IndexOf(" "), 50) + "..."
+                            ? item.HeadLine.Substring(0, item.HeadLine.Substring(0, 50).LastIndexOf(" ")) + "..."
                             : item.HeadLine;
                             }
                             @headLine

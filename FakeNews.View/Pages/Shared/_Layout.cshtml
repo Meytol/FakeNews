@@ -4,28 +4,19 @@
     @{
         Html.SetSeoInfo(seoInfo =>
         {
-
-
-
             seoInfo.SetCommonInfo(
                 pageTitle: "اخبار غیر موثق - محمدمهدی حمزه",
                 description: "پروژه دانشگاهی محمدمهدی حمزه",
                 url: "https://FakeNews.ir",
                 keywordTags: new List<string>() { "اخبار", "پروژه دانشگاهی", "Asp.Net", "RazorPages" }
             );
-
         });
     }
 
     @Html.SeoTags()
 
     <link href="~/lib/bootstrap/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="~/css/site.css" />
-    <style>
-        article, span, p, h1, h2, h3, h4, h5, h6, strong, a {
-            font-family: 'B Nazanin', 'Times New Roman'
-        }
-    </style>
+    <link href="~/css/site.css" rel="stylesheet" />
 
 </head>
 <body>

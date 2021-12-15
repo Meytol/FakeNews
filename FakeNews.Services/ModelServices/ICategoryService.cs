@@ -14,8 +14,8 @@ namespace FakeNews.Services.ModelServices
         Task<ServiceResponse<Category>> Add(Category model, int currentUserId);
         Task<ServiceResponse<Category>> Update(Category model, int currentUserId);
         Task<ServiceResponse> Delete(int id, int currentUserId);
-        Task<ServiceResponse<IEnumerable<Category>>> GetCategoriesTreeView(int parent = 0);
-        Task<ServiceResponse<IList<News>>> GetNewsByCategoryId(int categoryId);
+        Task<ServiceResponse<IEnumerable<Category>>> GetCategoriesTreeView(int parent = 0, IEnumerable<Category> cachedCategories = null);
+        Task<ServiceResponse<IList<News>>> GetNewsByCategoryId(int categoryId, bool getChildsContent = true);
         Task<ServiceResponse<Category>> Get(int categoryId);
 
     }
@@ -37,29 +37,42 @@ namespace FakeNews.Services.ModelServices
 
         #region Select
 
-        public async Task<ServiceResponse<IEnumerable<Category>>> GetCategoriesTreeView(int parentId = 0)
+        public async Task<ServiceResponse<IEnumerable<Category>>> GetCategoriesTreeView(int parentId = 0, IEnumerable<Category> cachedCategories = null)
         {
-            var allCategories = await _repository.SelectAll();
+            var allCategories = cachedCategories ?? await _repository.SelectAll();
 
             var categoriesTreeView = new List<Category>();
 
-            foreach (var cat1 in allCategories.Where(i => parentId == 0 ? i.ParentCategoryId.HasValue == false : i.ParentCategoryId == parentId))
+            foreach (var cat1 in allCategories.Where(i => parentId == 0 ? i.ParentCategoryId == null : i.ParentCategoryId == parentId))
             {
-                foreach (var cat2 in allCategories.Where(i => i.ParentCategoryId == cat1.Id))
+                var childs = (await GetCategoriesTreeView(cat1.Id, allCategories)).Data.ToList();
+
+                foreach (var child in childs)
                 {
-                    cat1.ChildCategories.Add(cat2);
+                    cat1.ChildCategories.Add(child);
                 }
+
                 categoriesTreeView.Add(cat1);
             }
 
             return new ServiceResponse<IEnumerable<Category>>(categoriesTreeView, HttpStatusCode.OK);
         }
 
-        public async Task<ServiceResponse<IList<News>>> GetNewsByCategoryId(int categoryId)
+        public async Task<ServiceResponse<IList<News>>> GetNewsByCategoryId(int categoryId, bool getChildsContent = true)
         {
-            var categoryNewsList = await _repository.Where(category => category.Id == categoryId)
+            var categoryIds = new List<int>
+            {
+                categoryId
+            };
+
+            if (getChildsContent)
+                categoryIds.AddRange((await GetCategoriesTreeView(categoryId)).Data.Select(c => c.Id));
+
+            var categoryNewsList = await _repository.Where(category => categoryIds.Contains(category.Id))
                 .Include(e => e.News)
                 .ThenInclude(e => e.Author)
+                .Include(e => e.News)
+                .ThenInclude(e => e.Category)
                 .SelectMany(e => e.News)
                 .Distinct()
                 .AsNoTracking()
