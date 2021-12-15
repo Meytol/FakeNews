@@ -27,8 +27,6 @@ namespace FakeNews.Database.Config
             foreach (var comment in Comments)
             {
                 comment.News = null;
-                comment.ParentComment = null;
-                comment.ChildComments = null;
             }
             foreach (var newsUserSeen in NewsUserSeens)
             {

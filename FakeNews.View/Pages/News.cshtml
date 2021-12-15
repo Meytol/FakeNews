@@ -1,46 +1,107 @@
 ﻿@page
 @model FakeNews.View.Pages.NewsModel
+@using Microsoft.AspNetCore.Antiforgery
+@inject IAntiforgery AntiForgery;
+
 @{
     Html.SetSeoInfo(seoInfo =>
-    {
-        seoInfo.SetArticleInfo(
-            authorName: Model.DesiredNews.Author.UserName,
-            publishDate: Model.DesiredNews.PublishDate,
-            authorUrl: "/NewsCategory?catId=" + Model.DesiredNews.Author.PublicId,  //optional
-            section: Model.DesiredNews.Category.TitleFa
-        ) ;
-    });
+                                                                            {
+                                                                                seoInfo.SetArticleInfo(
+                                                                                    authorName: Model.DesiredNews.Author.UserName,
+                                                                                    publishDate: Model.DesiredNews.PublishDate,
+                                                                                    authorUrl: "/Category?catId=" + Model.DesiredNews.Author.PublicId,  //optional
+                                                                                    section: Model.DesiredNews.Category.TitleFa
+                                                                                );
+                                                                            });
 }
-<div class="col col-9">
-    <div class="row"><img src="@Model.DesiredNews.MainImageUri" alt="@Model.DesiredNews.Keywords" /></div>
-    <div class="row">
-        <h1>
-            @Model.DesiredNews.Title
-        </h1>
-        <h2>
-            @Model.DesiredNews.HeadLine
-        </h2>
-        <h3>
-            @Model.DesiredNews.Author.UserName
-        </h3>
-        <h4>
-            <span>
-                دسته بندی:
+<div class="row mb-4">
+    <div class="col col-9">
+        <div class="row"><img src="@Model.DesiredNews.MainImageUri" alt="@Model.DesiredNews.Keywords" /></div>
+        <div class="row">
+            <h1>
+                @Model.DesiredNews.Title
+            </h1>
+            <h2>
+                @Model.DesiredNews.HeadLine
+            </h2>
+            <h3>
+                @Model.DesiredNews.Author.UserName
+            </h3>
+            <h4>
+                <span>
+                    دسته بندی:
                     <a href="/Category?catId=@Model.DesiredNews.CategoryId" class="link-info">
                         @Model.DesiredNews.Category.TitleFa
                     </a>
-            </span> 
-        </h4>
-        <h5>
-            @{new MD.PersianDateTime.PersianDateTime(Model.DesiredNews.PublishDate).ToString("yyyy/MMMM/dd");}
-        </h5>
-        <article>
-            @Html.Raw(Model.DesiredNews.Body)
-        </article>
+                </span>
+            </h4>
+            <h5>
+                @{
+                    new MD.PersianDateTime.PersianDateTime(Model.DesiredNews.PublishDate).ToString("yyyy/MMMM/dd");
+                }
+            </h5>
+            <article>
+                @Html.Raw(Model.DesiredNews.Body)
+            </article>
 
+        </div>
+    </div>
+    <div class="col col-3">
+        <div class="col col-12"></div>
+        <div class="col col-12"></div>
     </div>
 </div>
-<div class="col col-3">
-    <div class="col col-12"></div>
-    <div class="col col-12"></div>
+
+<div class="row">
+    <form method="post">
+        <input type="hidden" value=@AntiForgery.GetAndStoreTokens(HttpContext).RequestToken />
+        <input type="hidden" value=@Model.DesiredNews.Id name="newsId" />
+        <div class="row">
+            <div class="col col-9">
+                <div class="col col-4">
+                    <label for="senderNameText" class="form-label">نام:</label>
+                    <input class="form-control col col-4" type="text" id="senderNameText" name="senderNameText" placeholder="نام" required maxlength=50 />
+                </div>
+
+                <div class="col col-4">
+                    <label for="senderMailText" class="form-label">ایمیل:</label>
+                    <input class="form-control col col-4" type="email" id="senderMailText" name="senderMailText" placeholder="email@example.com" required maxlength=50 />
+                </div>
+
+                <div class="col col-6">
+                    <label for="newCommentText" class="form-label">نظر شما:</label>
+                    <textarea class="form-control" autocomplete="off" id="newCommentText" name="newCommentText" placeholder="متن نظر" required maxlength=500>
+
+</textarea>
+                </div>
+                <div class="col col-2">
+                    <input type="submit" value="ثبت نظر " class="form-control btn btn-primary" />
+                </div>
+
+            </div>
+            <div class="col col-3"></div>
+        </div>
+    </form>
+</div>
+<div class="row">
+    <div class="col col-9">
+        <div class="row">
+            @{
+                foreach (var comment in Model.Comments)
+                {
+                    <div class="col col-4">
+                        <label class="form-control" title="@comment.SenderMail">
+                            @comment.SenderName
+                        </label>
+                    </div>
+                    <div class="col col-8">
+                        <label class="form-control">
+                            @comment.Text
+                        </label>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    <div class="col col-3"></div>
 </div>

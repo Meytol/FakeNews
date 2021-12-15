@@ -3,6 +3,9 @@ using FakeNews.Common.Models;
 using FakeNews.Database.Tables;
 using System.Net;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace FakeNews.Services.ModelServices
 {
@@ -11,6 +14,7 @@ namespace FakeNews.Services.ModelServices
         Task<ServiceResponse<Comment>> Add(Comment model, int currentUserId);
         Task<ServiceResponse<Comment>> Update(Comment model, int currentUserId);
         Task<ServiceResponse> Delete(int id, int currentUserId);
+        Task<ServiceResponse<IList<Comment>>> GetByNewsId(int newsId);
     }
 
     public class CommentService : ICommentService
@@ -30,7 +34,11 @@ namespace FakeNews.Services.ModelServices
 
         #region Select
 
-
+        public async Task<ServiceResponse<IList<Comment>>> GetByNewsId(int newsId)
+        {
+            var comments = await _repository.Where(e => e.NewsId == newsId).OrderBy(e => e.CreatedOn).AsNoTracking().ToListAsync();
+            return new ServiceResponse<IList<Comment>>(comments);
+        }
 
         #endregion
 

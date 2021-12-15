@@ -2,6 +2,7 @@
 using FakeNews.Database.Tables.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -36,13 +37,6 @@ namespace FakeNews.Database.Config
                 .HasMany(ugc => ugc.ChildCategories)
                 .WithOne(ugc => ugc.ParentCategory)
                 .HasForeignKey(pc => pc.ParentCategoryId)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            builder.Entity<Comment>()
-                .HasMany(ugc => ugc.ChildComments)
-                .WithOne(ugc => ugc.ParentComment)
-                .HasForeignKey(pc => pc.ParentCommentId)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.NoAction);
 
@@ -5835,6 +5829,17 @@ namespace FakeNews.Database.Config
 												
 											
 										</div>",
+                });
+
+                Comments.Add(new Comment()
+                {
+                    Id = 1,
+                    NewsId = 1,
+                    SenderName = "hamzeh",
+                    SenderMail = "m.hamzeh@yahoo.com",
+                    Text = "Test",
+                    CreatedOn = System.DateTime.Now,
+                    PublicId = Guid.NewGuid()
                 });
             }
         }
