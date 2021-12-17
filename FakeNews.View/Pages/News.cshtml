@@ -5,14 +5,14 @@
 
 @{
     Html.SetSeoInfo(seoInfo =>
-                                                                            {
-                                                                                seoInfo.SetArticleInfo(
-                                                                                    authorName: Model.DesiredNews.Author.UserName,
-                                                                                    publishDate: Model.DesiredNews.PublishDate,
-                                                                                    authorUrl: "/Category?catId=" + Model.DesiredNews.Author.PublicId,  //optional
-                                                                                    section: Model.DesiredNews.Category.TitleFa
-                                                                                );
-                                                                            });
+                                                                                                                                                            {
+                                                                                                                                                                seoInfo.SetArticleInfo(
+                                                                                                                                                                    authorName: Model.DesiredNews.Author.UserName,
+                                                                                                                                                                    publishDate: Model.DesiredNews.PublishDate,
+                                                                                                                                                                    authorUrl: "/Category?catId=" + Model.DesiredNews.Author.PublicId,  //optional
+                                                                                                                                                                    section: Model.DesiredNews.Category.TitleFa
+                                                                                                                                                                );
+                                                                                                                                                            });
 }
 <div class="row mb-4">
     <div class="col col-9">
@@ -74,7 +74,7 @@
 
 </textarea>
                 </div>
-                <div class="col col-2">
+                <div class="col col-2 mt-2">
                     <input type="submit" value="ثبت نظر " class="form-control btn btn-primary" />
                 </div>
 
@@ -86,21 +86,34 @@
 <div class="row">
     <div class="col col-9">
         <div class="row">
-            @{
-                foreach (var comment in Model.Comments)
-                {
-                    <div class="col col-4">
-                        <label class="form-control" title="@comment.SenderMail">
-                            @comment.SenderName
-                        </label>
-                    </div>
-                    <div class="col col-8">
-                        <label class="form-control">
-                            @comment.Text
-                        </label>
-                    </div>
+            <section id="user-comments" class="themeform">
+                <h3 class="heading">
+                    <i class="far fa-comments"></i>
+                    @Model.Comments.Count
+                    دیدگاه
+                </h3>
+                @{
+                    foreach (var comment in Model.Comments)
+                    {
+                        <div id="commentlist-container" class="comment-tab">
+                            <ol id="comments" itemscope="" itemtype="http://schema.org/UserComments" class="commentlist">
+                                <li class="comment byuser comment-author-armin-abishi even thread-even depth-1 parent" id="comment-336601">
+                                    <div id="div-comment-336601" class="comment-body">
+                                        <div class="comment-author vcard">
+                                            <cite class="fn" title="@comment.SenderMail">
+                                                @comment.SenderName
+                                            </cite>
+                                        </div>
+                                        <p>
+                                            @comment.Text
+                                        </p>
+                                    </div>
+                                </li>
+                            </ol>
+                        </div>
+                    }
                 }
-            }
+            </section>
         </div>
     </div>
     <div class="col col-3"></div>
