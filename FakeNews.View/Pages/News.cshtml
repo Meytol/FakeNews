@@ -1,21 +1,22 @@
 ﻿@page
 @model FakeNews.View.Pages.NewsModel
+@using FakeNews.Common.StaticMethods
 @using Microsoft.AspNetCore.Antiforgery
 @inject IAntiforgery AntiForgery;
 
 @{
     Html.SetSeoInfo(seoInfo =>
-                                                                                                                                                            {
-                                                                                                                                                                seoInfo.SetArticleInfo(
-                                                                                                                                                                    authorName: Model.DesiredNews.Author.UserName,
-                                                                                                                                                                    publishDate: Model.DesiredNews.PublishDate,
-                                                                                                                                                                    authorUrl: "/Category?catId=" + Model.DesiredNews.Author.PublicId,  //optional
-                                                                                                                                                                    section: Model.DesiredNews.Category.TitleFa
-                                                                                                                                                                );
-                                                                                                                                                            });
+                {
+                    seoInfo.SetArticleInfo(
+                        authorName: Model?.DesiredNews?.Author?.UserName ?? "",
+                        publishDate: Model?.DesiredNews?.PublishDate ?? DateTime.Now,
+                        authorUrl: "/Category?catId=" + (Model?.DesiredNews?.Author?.PublicId ?? Guid.Empty).ToString(),  //optional
+                        section: Model.DesiredNews?.Category?.TitleFa ?? ""
+                    );
+                });
 }
 <div class="row mb-4">
-    <div class="col col-9">
+    <div class="col col-10">
         <div class="row"><img src="@Model.DesiredNews.MainImageUri" alt="@Model.DesiredNews.Keywords" /></div>
         <div class="row">
             <h1>
@@ -37,7 +38,7 @@
             </h4>
             <h5>
                 @{
-                    new MD.PersianDateTime.PersianDateTime(Model.DesiredNews.PublishDate).ToString("yyyy/MMMM/dd");
+                    Model.DesiredNews.PublishDate.AsPersianDateTime().ToLongDateString();
                 }
             </h5>
             <article>
@@ -46,10 +47,65 @@
 
         </div>
     </div>
-    <div class="col col-3">
-        <div class="col col-12"></div>
-        <div class="col col-12"></div>
+    <div class="col col-2">
+        <div class="col col-12">
+            <partial name="_SidebarAd"/>
+        </div>
     </div>
+</div>
+
+
+<div class="row">
+    <div class="col col-9">
+        <div class="row">
+            <section id="user-comments" class="card themeform">
+                <h3 class="heading">
+                    <i class="far fa-comments"></i>
+                    @Model.Comments.Count
+                    دیدگاه
+                </h3>
+                @{
+                    foreach (var comment in Model.Comments)
+                    {
+                        <div class="c-comments__content-section pt-0 pb-0 mb-0 mt-0">
+                            <div id="product-comment-list">
+                                <div class="c-comments__list pt-0 pb-0 mb-0 mt-0">
+                                    <div class="c-comments__item c-comments__item--pdp pt-0 pb-0 mb-0 mt-0">
+                                        <div class="c-comments__row pt-0 pb-0 mb-0 mt-0">
+                                            <span class="c-comments__title"></span>
+                                        </div>
+                                        <div class="c-comments__row pt-0 pb-0 mb-0 mt-0">
+                                            <span class="c-comments__detail" title=@comment.SenderMail>
+                                                نوشته شده توسط
+                                                @comment.SenderName
+                                            </span>
+                                            <br />
+                                            <span class="c-comments__detail">
+                                                @comment.CreatedOn.AsPersianDateTime().ToShortDateString()
+                                            </span>
+                                            <br />
+                                            <span class="c-comments__detail">
+                                                متن نظر:
+                                            </span>
+                                        </div>
+                                        <div class="c-comments__separator c-comments__separator--half"></div>
+                                        <div class="c-comments__row">
+                                        </div>
+                                        <div class="c-comments__row c-comments__row--grow c-comments__row--comment">
+                                            <div class="c-comments__content">@comment.Text</div>
+                                        </div>
+                                        <div class="c-comments__separator c-comments__separator--half"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                    }
+                }
+            </section>
+        </div>
+    </div>
+    <div class="col col-3"></div>
 </div>
 
 <div class="row">
@@ -57,15 +113,13 @@
         <input type="hidden" value=@AntiForgery.GetAndStoreTokens(HttpContext).RequestToken />
         <input type="hidden" value=@Model.DesiredNews.Id name="newsId" />
         <div class="row">
-            <div class="col col-9">
+            <div class="col col-10">
                 <div class="col col-4">
                     <label for="senderNameText" class="form-label">نام:</label>
-                    <input class="form-control col col-4" type="text" id="senderNameText" name="senderNameText" placeholder="نام" required maxlength=50 />
-                </div>
+                    <input class="form-control " type="text" id="senderNameText" name="senderNameText" placeholder="نام" required maxlength=50 />
 
-                <div class="col col-4">
                     <label for="senderMailText" class="form-label">ایمیل:</label>
-                    <input class="form-control col col-4" type="email" id="senderMailText" name="senderMailText" placeholder="email@example.com" required maxlength=50 />
+                    <input class="form-control" type="email" id="senderMailText" name="senderMailText" placeholder="email@example.com" required maxlength=50 />
                 </div>
 
                 <div class="col col-6">
@@ -79,42 +133,8 @@
                 </div>
 
             </div>
-            <div class="col col-3"></div>
+            <div class="col col-2"></div>
         </div>
     </form>
 </div>
-<div class="row">
-    <div class="col col-9">
-        <div class="row">
-            <section id="user-comments" class="themeform">
-                <h3 class="heading">
-                    <i class="far fa-comments"></i>
-                    @Model.Comments.Count
-                    دیدگاه
-                </h3>
-                @{
-                    foreach (var comment in Model.Comments)
-                    {
-                        <div id="commentlist-container" class="comment-tab">
-                            <ol id="comments" itemscope="" itemtype="http://schema.org/UserComments" class="commentlist">
-                                <li class="comment byuser comment-author-armin-abishi even thread-even depth-1 parent" id="comment-336601">
-                                    <div id="div-comment-336601" class="comment-body">
-                                        <div class="comment-author vcard">
-                                            <cite class="fn" title="@comment.SenderMail">
-                                                @comment.SenderName
-                                            </cite>
-                                        </div>
-                                        <p>
-                                            @comment.Text
-                                        </p>
-                                    </div>
-                                </li>
-                            </ol>
-                        </div>
-                    }
-                }
-            </section>
-        </div>
-    </div>
-    <div class="col col-3"></div>
-</div>
+

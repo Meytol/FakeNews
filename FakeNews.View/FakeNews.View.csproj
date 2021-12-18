@@ -10,6 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Pages\Shared\_SidebarAd.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="HtmlSanitizer" Version="6.0.441" />
     <PackageReference Include="MD.PersianDateTime" Version="4.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.20" />
@@ -37,6 +41,18 @@
     <ProjectReference Include="..\FakeNews.Services\FakeNews.Services.csproj" />
     <ProjectReference Include="..\FakeNews.Common\FakeNews.Common.csproj" />
     <ProjectReference Include="..\FakeNews.Database\FakeNews.Database.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Shared\_SidebarAd.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\Shared\_SidebarAd.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Pages\Shared\_SidebarAd.cshtml" />
   </ItemGroup>
 
 </Project>

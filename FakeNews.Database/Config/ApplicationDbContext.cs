@@ -5835,9 +5835,29 @@ namespace FakeNews.Database.Config
                 {
                     Id = 1,
                     NewsId = 1,
-                    SenderName = "hamzeh",
+                    SenderName = "محمدمهدی حمزه",
                     SenderMail = "m.hamzeh@yahoo.com",
-                    Text = "Test",
+                    Text = "کامنت اول",
+                    CreatedOn = System.DateTime.Now,
+                    PublicId = Guid.NewGuid()
+                });
+                Comments.Add(new Comment()
+                {
+                    Id = 2,
+                    NewsId = 1,
+                    SenderName = "محمدمهدی حمزه",
+                    SenderMail = "m.hamzeh@yahoo.com",
+                    Text = "کامنت دوم",
+                    CreatedOn = System.DateTime.Now,
+                    PublicId = Guid.NewGuid()
+                });
+                Comments.Add(new Comment()
+                {
+                    Id = 3,
+                    NewsId = 1,
+                    SenderName = "محمدمهدی حمزه",
+                    SenderMail = "m.hamzeh@yahoo.com",
+                    Text = "کامنت سوم",
                     CreatedOn = System.DateTime.Now,
                     PublicId = Guid.NewGuid()
                 });

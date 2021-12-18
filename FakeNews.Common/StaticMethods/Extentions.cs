@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using MD.PersianDateTime;
+using System;
+using System.Net;
 
 namespace FakeNews.Common.StaticMethods
 {
@@ -13,5 +15,8 @@ namespace FakeNews.Common.StaticMethods
             //5xx is for server error
             return (int)statusCode < 400;
         }
+
+        public static PersianDateTime AsPersianDateTime(this DateTime dateTime) =>
+            new(dateTime);
     }
 }

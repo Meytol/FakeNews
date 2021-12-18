@@ -6,4 +6,8 @@
 	  <AssemblyName>FakeNews.Common</AssemblyName>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MD.PersianDateTime" Version="4.3.0" />
+  </ItemGroup>
+
 </Project>

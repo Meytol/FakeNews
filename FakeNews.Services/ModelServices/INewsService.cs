@@ -64,6 +64,7 @@ namespace FakeNews.Services.ModelServices
         {
             var news = await _repository
                 .Where(e => e.Id == id)
+                .Include(e => e.Comments)
                 .Include(e => e.Author)
                 .Include(ie => ie.Category)
                 .AsNoTracking()

@@ -38,16 +38,16 @@ namespace FakeNews.View.Pages
             }
 
             var desiredNewsResult = await _newsService.GetById(id);
-            var commentsResult = await _commentService.GetByNewsId(id);
+            //var commentsResult = await _commentService.GetByNewsId(id);
 
-            if (desiredNewsResult.IsSuccessful is false || commentsResult.IsSuccessful is false)
+            if (desiredNewsResult.IsSuccessful is false )
             {
                 RedirectToPage(pageName: "Index");
                 return;
             }
 
             DesiredNews = desiredNewsResult.Data;
-            Comments = commentsResult.Data;
+            Comments = desiredNewsResult.Data.Comments.ToList();// commentsResult.Data;
         }
 
         public async Task OnPostAsync(string senderNameText, string senderMailText, string newCommentText, int newsId)
