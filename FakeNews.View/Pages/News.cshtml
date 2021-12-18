@@ -6,14 +6,14 @@
 
 @{
     Html.SetSeoInfo(seoInfo =>
-                {
-                    seoInfo.SetArticleInfo(
-                        authorName: Model?.DesiredNews?.Author?.UserName ?? "",
-                        publishDate: Model?.DesiredNews?.PublishDate ?? DateTime.Now,
-                        authorUrl: "/Category?catId=" + (Model?.DesiredNews?.Author?.PublicId ?? Guid.Empty).ToString(),  //optional
-                        section: Model.DesiredNews?.Category?.TitleFa ?? ""
-                    );
-                });
+                                {
+                                    seoInfo.SetArticleInfo(
+                                        authorName: Model?.DesiredNews?.Author?.UserName ?? "",
+                                        publishDate: Model?.DesiredNews?.PublishDate ?? DateTime.Now,
+                                        authorUrl: "/Category?catId=" + (Model?.DesiredNews?.Author?.PublicId ?? Guid.Empty).ToString(),  //optional
+                                        section: Model.DesiredNews?.Category?.TitleFa ?? ""
+                                    );
+                                });
 }
 <div class="row mb-4">
     <div class="col col-10">
@@ -49,7 +49,7 @@
     </div>
     <div class="col col-2">
         <div class="col col-12">
-            <partial name="_SidebarAd"/>
+            <partial name="_SidebarAd" />
         </div>
     </div>
 </div>
@@ -110,8 +110,8 @@
 
 <div class="row">
     <form method="post">
-        <input type="hidden" value=@AntiForgery.GetAndStoreTokens(HttpContext).RequestToken />
-        <input type="hidden" value=@Model.DesiredNews.Id name="newsId" />
+        @*<input type="hidden" value=@AntiForgery.GetAndStoreTokens(HttpContext).RequestToken />*@
+        <input type="hidden" value=@Model.DesiredNews.Id name="newsId" id="newsId" />
         <div class="row">
             <div class="col col-10">
                 <div class="col col-4">
@@ -129,7 +129,7 @@
 </textarea>
                 </div>
                 <div class="col col-2 mt-2">
-                    <input type="submit" value="ثبت نظر " class="form-control btn btn-primary" />
+                    <input type="button" value="ثبت نظر " id="newCommentSubmit" class="form-control btn btn-primary" />
                 </div>
 
             </div>
@@ -138,3 +138,30 @@
     </form>
 </div>
 
+<script>
+            $("#newCommentSubmit").click(function(){
+                debugger;
+                var formData = {
+                    RequestVerificationToken:@AntiForgery.GetAndStoreTokens(HttpContext).RequestToken,
+                    senderNameText:$("#senderNameText").val,
+                    senderMailText:$("#senderMailText").val,
+                    newCommentText:$("#newCommentText").val,
+                    newsId:$("#newsId").val
+                }; 
+
+    $.ajax({
+        url : "/",
+        type: "POST",
+        data : formData,
+        success: function(data, textStatus, jqXHR)
+        {
+            alert("done");
+            location.reload();
+        },
+        error: function (jqXHR, textStatus, errorThrown)
+        {
+            alert("shit happens");
+            location.reload();
+        }
+    });
+</script>

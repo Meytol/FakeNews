@@ -1,0 +1,160 @@
+﻿@model FakeNews.View.Pages.Shared.RecentNewsByCategory
+@{
+
+}
+
+<h2>
+    اخبار
+    <a href="~/Category?catId=@Model.CurrentCategory.Id">
+    @Model.CurrentCategory.TitleFa
+    </a>
+</h2>
+
+<div class="row mb-4 mt-2">
+    <div class="col col-6 ">
+        <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+            <!-- Carousel indicators -->
+            <ol class="carousel-indicators">
+
+                @for (int i = 0; i < Model.RecentNews.Count(); i++)
+                {
+                    <li data-bs-target="#myCarousel" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "") bg-dark" ></li>
+                }
+            </ol>
+
+            <!-- Wrapper for carousel items -->
+            <div class="carousel-inner" style="height: 100%">
+
+                @for (int i = 0; i < Model.RecentNews.Count(); i++)
+                {
+                    var item = @Model.RecentNews.ElementAt(i);
+                    <div class="carousel-item @(i == 0 ? "active" : "") ">
+                        <div class="card">
+                            <img src="@item.MainImageUri" class="card-img-top" alt="@item.Keywords" style="width: auto; height: 450px">
+                            <div class="card-body">
+                                <h3 class="card-title">
+                                    @item.Title
+                                </h3>
+                                <h5 class="card-subtitle mb-2 text-muted">
+                                    <span>
+                                        دسته بندی:
+                                            <a href="/Category?catId=@item.CategoryId" class="link-info">
+                                                @item.Category.TitleFa
+                                            </a>
+                                    </span>
+                                </h5>
+                                <p class="card-text">
+                                    @{
+                                    var headLine = item.HeadLine.Length > 80
+                 ? item.HeadLine.Substring(0, item.HeadLine.Substring(0, 80).LastIndexOf(" ")) + "..."
+                 : item.HeadLine;
+                 }
+                                    
+                                    @headLine
+                                </p>
+                                <a href="/News?id=@item.Id" class="btn btn-primary">ادامه خبر </a>
+
+                                <p class="card-text">
+                                    <small class="text-muted">
+                                        <span>
+                                            نوشته شده توسط
+                                            @item.Author.UserName
+                                        </span>
+                                        <br />
+                                        @{
+                                            var differceTime = (DateTime.Now - item.PublishDate);
+                                            if (differceTime.TotalMinutes < 60)
+                                            {
+                                                <span>
+                                                    @((int)differceTime.TotalMinutes)
+                                                    دقیقه قبل
+                                                </span>
+                                            }
+                                            else if (differceTime.TotalHours < 24)
+                                            {
+                                                <span>
+                                                    @((int)differceTime.TotalHours)
+                                                    ساعت قبل
+                                                </span>
+                                            }
+                                            else if (differceTime.TotalDays < 30)
+                                            {
+                                    <span>
+                                        @((int)differceTime.TotalDays)
+                                        روز قبل
+                                    </span>
+                                            }
+                                            else if (differceTime.TotalDays < 365)
+                                            {
+                                    <span>
+                                        @((int)differceTime.TotalDays % 30)
+                                        ماه قبل
+                                    </span>
+                                            }
+                                            else
+                                            {
+                                    <span>
+                                        @((int)differceTime.TotalDays % 365)
+                                        سال قبل
+                                    </span>
+                                            }
+                                        }
+                                    </small>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+
+            </div>
+
+            <!-- Carousel controls -->
+            <a class="carousel-control-prev mt-auto mb-auto" href="#myCarousel" data-bs-slide="prev" style="height: 25%">
+                <span class="carousel-control-prev-icon bg-dark"></span>
+            </a>
+            <a class="carousel-control-next mt-auto mb-auto" href="#myCarousel" data-bs-slide="next" style="height: 25%">
+                <span class="carousel-control-next-icon bg-dark "></span>
+            </a>
+        </div>
+    </div>
+    <div class="col col-6">
+        <div class="row">
+            @foreach (var item in Model.RecentNews.Take(4))
+            {
+                <div class="col col-6">
+                    <div class="card mb-1">
+                        <img src="@item.MainImageUri" class="card-img-top" alt="@item.Keywords" style="max-width: 300px; max-height: 150px">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                @item.Title
+                            </h5>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                <span>
+                                    دسته بندی: 
+                                        <a href="/Category?catId=@item.CategoryId" class="link-info">
+                                            @item.Category.TitleFa
+                                        </a>
+                                </span>
+                            </h6>
+                            <p class="card-text">
+                                @{
+                                    var headLine = item.HeadLine.Length > 50
+                 ? item.HeadLine.Substring(0, item.HeadLine.Substring(0, 50).LastIndexOf(" ")) + "..."
+                 : item.HeadLine;
+                 }
+                                    
+                                    @headLine
+                                    
+                                
+                            </p>
+                            <a href="/News?id=@item.Id" class="btn btn-primary">ادامه خبر</a>
+
+
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

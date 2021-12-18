@@ -76,6 +76,7 @@ namespace FakeNews.Services.ModelServices
                 .SelectMany(e => e.News)
                 .Distinct()
                 .AsNoTracking()
+                .OrderBy(e => e.CreatedOn)
                 .ToListAsync();
 
             return new ServiceResponse<IList<News>>(categoryNewsList, HttpStatusCode.OK);
