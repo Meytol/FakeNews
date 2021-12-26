@@ -37,17 +37,7 @@ namespace FakeNews.View.Pages
                 return;
             }
 
-            var desiredNewsResult = await _newsService.GetById(id);
-            //var commentsResult = await _commentService.GetByNewsId(id);
-
-            if (desiredNewsResult.IsSuccessful is false )
-            {
-                RedirectToPage(pageName: "Index");
-                return;
-            }
-
-            DesiredNews = desiredNewsResult.Data;
-            Comments = desiredNewsResult.Data.Comments.ToList();// commentsResult.Data;
+            await FillPageModelData(newsId: id);            
         }
 
         public async Task OnPostAsync(string senderNameText, string senderMailText, string newCommentText, int newsId)
@@ -85,8 +75,21 @@ namespace FakeNews.View.Pages
             },
             0);
 
+            await FillPageModelData(newsId);
+        }
 
+        private async Task FillPageModelData(int newsId)
+        {
+            var desiredNewsResult = await _newsService.GetById(newsId);
 
+            if (desiredNewsResult.IsSuccessful is false)
+            {
+                RedirectToPage(pageName: "Index");
+                return;
+            }
+
+            DesiredNews = desiredNewsResult.Data;
+            Comments = desiredNewsResult.Data.Comments.ToList();
         }
 
         public News DesiredNews { get; set; }

@@ -32,7 +32,7 @@
                 <span>
                     دسته بندی:
                     <a href="/Category?catId=@Model.DesiredNews.CategoryId" class="link-info">
-                        @Model.DesiredNews.Category.TitleFa
+                        @Model.DesiredNews.Category.TitleFa  
                     </a>
                 </span>
             </h4>
@@ -55,15 +55,15 @@
 </div>
 
 
-<div class="row">
+<div class="row" id="comments"> 
+    <h3 class="heading">
+        <i class="far fa-comments"></i>
+        @Model.Comments.Count
+        دیدگاه
+    </h3>
     <div class="col col-9">
         <div class="row">
             <section id="user-comments" class="card themeform">
-                <h3 class="heading">
-                    <i class="far fa-comments"></i>
-                    @Model.Comments.Count
-                    دیدگاه
-                </h3>
                 @{
                     foreach (var comment in Model.Comments)
                     {
@@ -110,8 +110,8 @@
 
 <div class="row">
     <form method="post">
-        @*<input type="hidden" value=@AntiForgery.GetAndStoreTokens(HttpContext).RequestToken />*@
-        <input type="hidden" value=@Model.DesiredNews.Id name="newsId" id="newsId" />
+        <input type="hidden" id="xsrfTokenId" value=@AntiForgery.GetAndStoreTokens(HttpContext).RequestToken />
+        <input type="hidden" id="newsId" value=@Model.DesiredNews.Id name="newsId" />
         <div class="row">
             <div class="col col-10">
                 <div class="col col-4">
@@ -124,12 +124,10 @@
 
                 <div class="col col-6">
                     <label for="newCommentText" class="form-label">نظر شما:</label>
-                    <textarea class="form-control" autocomplete="off" id="newCommentText" name="newCommentText" placeholder="متن نظر" required maxlength=500>
-
-</textarea>
+                    <textarea class="form-control" autocomplete="off" id="newCommentText" name="newCommentText" placeholder="متن نظر" required maxlength=500></textarea>
                 </div>
                 <div class="col col-2 mt-2">
-                    <input type="button" value="ثبت نظر " id="newCommentSubmit" class="form-control btn btn-primary" />
+                    <input type="submit" value="ثبت نظر" id="newCommentSubmit" class="form-control btn btn-primary" />
                 </div>
 
             </div>
@@ -137,31 +135,3 @@
         </div>
     </form>
 </div>
-
-<script>
-            $("#newCommentSubmit").click(function(){
-                debugger;
-                var formData = {
-                    RequestVerificationToken:@AntiForgery.GetAndStoreTokens(HttpContext).RequestToken,
-                    senderNameText:$("#senderNameText").val,
-                    senderMailText:$("#senderMailText").val,
-                    newCommentText:$("#newCommentText").val,
-                    newsId:$("#newsId").val
-                }; 
-
-    $.ajax({
-        url : "/",
-        type: "POST",
-        data : formData,
-        success: function(data, textStatus, jqXHR)
-        {
-            alert("done");
-            location.reload();
-        },
-        error: function (jqXHR, textStatus, errorThrown)
-        {
-            alert("shit happens");
-            location.reload();
-        }
-    });
-</script>
