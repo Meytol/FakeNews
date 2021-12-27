@@ -4,6 +4,13 @@
     ViewData["Title"] = "Home page";
 }
 
+
+<div class="row mb-4">
+    <div class="col mr-auto ml-auto" >
+        <partial name="_RowAd" />
+    </div>
+</div>
+
 <div class="row mb-4">
     <div class="col col-6 ">
         <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
@@ -12,7 +19,7 @@
 
                 @for (int i = 0; i < Model.RecentNews.Count(); i++)
                 {
-                        <li data-bs-target="#myCarousel" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "") bg-dark" ></li>
+                    <li data-bs-target="#myCarousel" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "") bg-dark"></li>
                 }
             </ol>
 
@@ -22,54 +29,54 @@
                 @for (int i = 0; i < Model.RecentNews.Count(); i++)
                 {
                     var item = @Model.RecentNews.ElementAt(i);
-                        <div class="carousel-item @(i == 0 ? "active" : "") ">
-                            <div class="card">
-                                <img src="@item.MainImageUri" class="card-img-top" alt="@item.Keywords" style="width: auto; height: 450px">
-                                <div class="card-body">
-                                    <h3 class="card-title">
+                    <div class="carousel-item @(i == 0 ? "active" : "") ">
+                        <div class="card">
+                            <img src="@item.MainImageUri" class="card-img-top" alt="@item.Keywords" style="width: auto; height: 450px">
+                            <div class="card-body">
+                                <h3 class="card-title">
                                     @item.Title
-                                    </h3>
-                                    <h5 class="card-subtitle mb-2 text-muted">
-                                        <span>
-                                            دسته بندی:
-                                                <a href="/Category?catId=@item.CategoryId" class="link-info">
+                                </h3>
+                                <h5 class="card-subtitle mb-2 text-muted">
+                                    <span>
+                                        دسته بندی:
+                                        <a href="/Category?catId=@item.CategoryId" class="link-info">
                                             @item.Category.TitleFa
-                                                </a>
-                                        </span>
-                                    </h5>
-                                    <p class="card-text">
+                                        </a>
+                                    </span>
+                                </h5>
+                                <p class="card-text">
                                     @{
                                         var headLine = item.HeadLine.Length > 80
-? item.HeadLine.Substring(0, item.HeadLine.Substring(0, 80).LastIndexOf(" ")) + "..."
-: item.HeadLine;
+                ? item.HeadLine.Substring(0, item.HeadLine.Substring(0, 80).LastIndexOf(" ")) + "..."
+                : item.HeadLine;
                                     }
 
                                     @headLine
-                                    </p>
-                                    <a href="/News?id=@item.Id" class="btn btn-primary">ادامه خبر </a>
+                                </p>
+                                <a href="/News?id=@item.Id" class="btn btn-primary">ادامه خبر </a>
 
-                                    <p class="card-text">
-                                        <small class="text-muted">
-                                            <span>
-                                                نوشته شده توسط
+                                <p class="card-text">
+                                    <small class="text-muted">
+                                        <span>
+                                            نوشته شده توسط
                                             @item.Author.UserName
-                                            </span>
-                                            <br />
+                                        </span>
+                                        <br />
                                         @{
                                             var differceTime = (DateTime.Now - item.PublishDate);
                                             if (differceTime.TotalMinutes < 60)
                                             {
-                                                            <span>
+                                                <span>
                                                     @((int)differceTime.TotalMinutes)
-                                                                دقیقه قبل
-                                                            </span>
+                                                    دقیقه قبل
+                                                </span>
                                             }
                                             else if (differceTime.TotalHours < 24)
                                             {
-                                                            <span>
+                                                <span>
                                                     @((int)differceTime.TotalHours)
-                                                                ساعت قبل
-                                                            </span>
+                                                    ساعت قبل
+                                                </span>
                                             }
                                             else if (differceTime.TotalDays < 30)
                                             {
@@ -93,11 +100,11 @@
                                                 </span>
                                             }
                                         }
-                                        </small>
-                                    </p>
-                                </div>
+                                    </small>
+                                </p>
                             </div>
                         </div>
+                    </div>
                 }
 
 
@@ -116,38 +123,38 @@
         <div class="row">
             @foreach (var item in Model.RecentNews.Take(4))
             {
-                    <div class="col col-6">
-                        <div class="card mb-1">
-                            <img src="@item.MainImageUri" class="card-img-top" alt="@item.Keywords" style="max-width: 300px; max-height: 150px">
-                            <div class="card-body">
-                                <h5 class="card-title">
+                <div class="col col-6">
+                    <div class="card mb-1">
+                        <img src="@item.MainImageUri" class="card-img-top" alt="@item.Keywords" style="max-width: 300px; max-height: 150px">
+                        <div class="card-body">
+                            <h5 class="card-title">
                                 @item.Title
-                                </h5>
-                                <h6 class="card-subtitle mb-2 text-muted">
-                                    <span>
-                                        دسته بندی: 
-                                            <a href="/Category?catId=@item.CategoryId" class="link-info">
+                            </h5>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                <span>
+                                    دسته بندی:
+                                    <a href="/Category?catId=@item.CategoryId" class="link-info">
                                         @item.Category.TitleFa
-                                            </a>
-                                    </span>
-                                </h6>
-                                <p class="card-text">
+                                    </a>
+                                </span>
+                            </h6>
+                            <p class="card-text">
                                 @{
                                     var headLine = item.HeadLine.Length > 50
-? item.HeadLine.Substring(0, item.HeadLine.Substring(0, 50).LastIndexOf(" ")) + "..."
-: item.HeadLine;
+                ? item.HeadLine.Substring(0, item.HeadLine.Substring(0, 50).LastIndexOf(" ")) + "..."
+                : item.HeadLine;
                                 }
 
                                 @headLine
 
 
-                                </p>
-                                <a href="/News?id=@item.Id" class="btn btn-primary">ادامه خبر</a>
+                            </p>
+                            <a href="/News?id=@item.Id" class="btn btn-primary">ادامه خبر</a>
 
 
-                            </div>
                         </div>
                     </div>
+                </div>
             }
         </div>
     </div>
@@ -162,30 +169,30 @@
             {
                 if (mainCategory.ChildCategories == null || mainCategory.ChildCategories.Any() is false)
                 {
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/Category?catId=@mainCategory.Id">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Category?catId=@mainCategory.Id">
                             @mainCategory.TitleFa
-                                    </a>
-                                </li>
+                        </a>
+                    </li>
                 }
                 else
                 {
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" href="/Category?catId=@mainCategory.Id">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" href="/Category?catId=@mainCategory.Id">
                             @mainCategory.TitleFa
-                                    </a>
-                                    <ul class="dropdown-menu">
+                        </a>
+                        <ul class="dropdown-menu">
 
                             @foreach (var subCategory in mainCategory.ChildCategories)
                             {
-                                                <li>
-                                                    <a class="dropdown-item" href="/Category?catId=@subCategory.Id">
+                                <li>
+                                    <a class="dropdown-item" href="/Category?catId=@subCategory.Id">
                                         @subCategory.TitleFa
-                                                    </a>
-                                                </li>
-                            }
-                                    </ul>
+                                    </a>
                                 </li>
+                            }
+                        </ul>
+                    </li>
                 }
             }
         }
@@ -193,15 +200,34 @@
 </div>
 <hr />
 
+<div class="row mb-4">
+    <partial name="_DoubleRowAd" />
+</div>
+<hr />
 
 @await Component.InvokeAsync("RecentNewsByCategory", 3)
 <hr />
 
+<div class="row mb-4">
+    <partial name="_DoubleRowAd" />
+</div>
+<hr />
+
 @await Component.InvokeAsync("RecentNewsByCategory", 5)
 <hr />
+<div class="row mb-4">
+    <partial name="_DoubleRowAd" />
+</div>
+<hr />
+
 
 @await Component.InvokeAsync("RecentNewsByCategory", 6)
 <hr />
+<div class="row mb-4">
+    <partial name="_DoubleRowAd" />
+</div>
+<hr />
+
 
 @await Component.InvokeAsync("RecentNewsByCategory", 7)
 <hr />
