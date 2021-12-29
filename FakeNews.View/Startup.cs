@@ -38,6 +38,9 @@ namespace FakeNews.View
 
             new ApplicationDbContext().Seed();
 
+            //var seedDbTask = new Task(() => new ApplicationDbContext().SeedAsync());
+            //seedDbTask.Start();
+
             services.AddRazorPages();
 
             FakeNews.Services.Helper.IocHandler.ResolveUnitOfWorkIoc(services);
@@ -47,7 +50,7 @@ namespace FakeNews.View
             services.AddSeoTags(seoInfo =>
             {
                 seoInfo.SetSiteInfo(
-                    siteTitle: "My Site Title",
+                    siteTitle: "اخبار غیر موثق - محمدمهدی حمزه",
                     siteTwitterId: "@MM_Hamzeh",  //optional
                     siteFacebookId: "https://facebook.com/mohammadmahdi_hamzeh",  //optional
                     robots: "index, follow"  //optional
@@ -61,6 +64,9 @@ namespace FakeNews.View
                 seoInfo.SetLocales("fa", new string[] { "fa-IR" });
             });
 
+
+
+            //seedDbTask.Wait();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace FakeNews.Database.Config
 {
@@ -55,7 +56,13 @@ namespace FakeNews.Database.Config
         public void Seed()
         {
             FeedSeedData();
-            base.SaveChanges();
+            SaveChanges();
+        }
+
+        public async Task SeedAsync()
+        {
+            await FeedSeedDataAsync();
+            await SaveChangesAsync();
         }
 
         #region override Seed changes
@@ -90,291 +97,282 @@ namespace FakeNews.Database.Config
 
         private void FeedSeedData()
         {
-            var isDataFound = false;
-            //if (System.IO.File.Exists("SeedData.Json") is true)
-            //{
-            //    var json = System.IO.File.ReadAllText("SeedData.Json");
-
-            //    if (string.IsNullOrWhiteSpace(json))
-            //    {
-            //        var data = Newtonsoft.Json.JsonConvert.DeserializeObject<FullDbSet>(json);
-            //        json = null;
-
-            //        Users.AddRange(data.Users);
-            //        Roles.AddRange(data.Roles);
-            //        UserRoles.AddRange(data.UserRoles);
-            //        Categories.AddRange(data.Categories);
-            //        News.AddRange(data.News);
-
-            //        data = null;
-            //        System.GC.Collect();
-            //        isDataFound = true;
-            //    }
-            //}
-
-            if (isDataFound is false)
+            if (IsDataSeeded() is false)
             {
-                Users.Add(new User()
-                {
-                    Email = "mohammadmahdi.hamzeh@yahoo.com",
-                    UserName = "MM_Hamzeh",
-                    CreatedOn = System.DateTime.Now,
-                    IsDeleted = false,
-                    LockoutEnabled = false,
-                    PublicId = System.Guid.Parse("57D8F436-99E8-43A3-8751-8EFCD0B6B3AB"),
-                    NormalizedEmail = "mohammadmahdi.hamzeh@yahoo.com".Normalize(),
-                    NormalizedUserName = "MM_Hamzeh".Normalize(),
-                    PasswordHash = "hash",
-                    PhoneNumber = "09386114201",
-                    EmailConfirmed = true,
-                    PhoneNumberConfirmed = true,
-                    TwoFactorEnabled = false,
-                    Id = 1,
-                    ConcurrencyStamp = System.Guid.NewGuid().ToString(),
-                    CreatorId = 1
-                });
-                Users.Add(new User()
-                {
-                    Email = "m.hamzeh2@test.com",
-                    UserName = "meytol2",
-                    CreatedOn = System.DateTime.Now,
-                    IsDeleted = false,
-                    LockoutEnabled = false,
-                    PublicId = System.Guid.Parse("A0107FFA-FCB5-4F81-81C1-7709C34B9DA1"),
-                    NormalizedEmail = "m.hamzeh2@test.com".Normalize(),
-                    NormalizedUserName = "meytol2".Normalize(),
-                    PasswordHash = "hash2",
-                    PhoneNumber = "09386114202",
-                    EmailConfirmed = true,
-                    PhoneNumberConfirmed = true,
-                    TwoFactorEnabled = false,
-                    Id = 2,
-                    ConcurrencyStamp = System.Guid.NewGuid().ToString(),
-                    CreatorId = 1
-                });
+                GenerateFirstData();
+            }
+        }
+        private async Task FeedSeedDataAsync()
+        {
+            if ((await IsDataSeededAsync()) is false)
+            {
+                GenerateFirstData();
+            }
+        }
 
-                Roles.Add(new Role()
-                {
-                    Id = 1,
-                    Name = "User",
-                    PublicId = System.Guid.Parse("1E60F7C9-9825-4A82-B2A8-6D861864787D"),
-                    CreatorId = 1,
-                    IsDeleted = false,
-                    NormalizedName = "User".Normalize()
-                });
-                Roles.Add(new Role()
-                {
-                    Id = 2,
-                    Name = "Admin",
-                    PublicId = System.Guid.Parse("1E60F7C9-9825-4A82-B2A8-6D861864787D"),
-                    CreatorId = 1,
-                    IsDeleted = false,
-                    NormalizedName = "Admin".Normalize()
-                });
+        private void GenerateFirstData()
+        {
+            Users.Add(new User()
+            {
+                Email = "mohammadmahdi.hamzeh@yahoo.com",
+                UserName = "MM_Hamzeh",
+                CreatedOn = System.DateTime.Now,
+                IsDeleted = false,
+                LockoutEnabled = false,
+                PublicId = System.Guid.Parse("57D8F436-99E8-43A3-8751-8EFCD0B6B3AB"),
+                NormalizedEmail = "mohammadmahdi.hamzeh@yahoo.com".Normalize(),
+                NormalizedUserName = "MM_Hamzeh".Normalize(),
+                PasswordHash = "hash",
+                PhoneNumber = "09386114201",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
+                TwoFactorEnabled = false,
+                Id = 1,
+                ConcurrencyStamp = System.Guid.NewGuid().ToString(),
+                CreatorId = 1
+            });
+            Users.Add(new User()
+            {
+                Email = "m.hamzeh2@test.com",
+                UserName = "meytol2",
+                CreatedOn = System.DateTime.Now,
+                IsDeleted = false,
+                LockoutEnabled = false,
+                PublicId = System.Guid.Parse("A0107FFA-FCB5-4F81-81C1-7709C34B9DA1"),
+                NormalizedEmail = "m.hamzeh2@test.com".Normalize(),
+                NormalizedUserName = "meytol2".Normalize(),
+                PasswordHash = "hash2",
+                PhoneNumber = "09386114202",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
+                TwoFactorEnabled = false,
+                Id = 2,
+                ConcurrencyStamp = System.Guid.NewGuid().ToString(),
+                CreatorId = 1
+            });
 
-                UserRoles.Add(new Microsoft.AspNetCore.Identity.IdentityUserRole<int>()
-                {
-                    RoleId = 1,
-                    UserId = 1
-                });
-                UserRoles.Add(new Microsoft.AspNetCore.Identity.IdentityUserRole<int>()
-                {
-                    RoleId = 2,
-                    UserId = 1
-                });
-                UserRoles.Add(new Microsoft.AspNetCore.Identity.IdentityUserRole<int>()
-                {
-                    RoleId = 1,
-                    UserId = 2
-                });
+            Roles.Add(new Role()
+            {
+                Id = 1,
+                Name = "User",
+                PublicId = System.Guid.Parse("1E60F7C9-9825-4A82-B2A8-6D861864787D"),
+                CreatorId = 1,
+                IsDeleted = false,
+                NormalizedName = "User".Normalize()
+            });
+            Roles.Add(new Role()
+            {
+                Id = 2,
+                Name = "Admin",
+                PublicId = System.Guid.Parse("1E60F7C9-9825-4A82-B2A8-6D861864787D"),
+                CreatorId = 1,
+                IsDeleted = false,
+                NormalizedName = "Admin".Normalize()
+            });
 
-                Categories.Add(new Category()
-                {
-                    Id = 1,
-                    TitleEn = "AllArticles",
-                    TitleFa = "همه نوشته  ها",
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1
-                });
-                Categories.Add(new Category()
-                {
-                    Id = 2,
-                    TitleEn = "Articles",
-                    TitleFa = "اخبار و مقالات",
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    ParentCategoryId = 1
-                });
-                Categories.Add(new Category()
-                {
-                    Id = 3,
-                    TitleEn = "MobilePhone",
-                    TitleFa = "گوشی موبایل",
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    ParentCategoryId = 2
-                });
-                Categories.Add(new Category()
-                {
-                    Id = 4,
-                    TitleEn = "MobilePhoneAccessory",
-                    TitleFa = "لوازم جانبی گوشی موبایل",
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    ParentCategoryId = 3
-                });
-                Categories.Add(new Category()
-                {
-                    Id = 5,
-                    TitleEn = "Tablet",
-                    TitleFa = "تبلت",
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    ParentCategoryId = 2
-                });
-                Categories.Add(new Category()
-                {
-                    Id = 6,
-                    TitleEn = "Laptop",
-                    TitleFa = "لپ تاپ",
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    ParentCategoryId = 2
-                });
-                Categories.Add(new Category()
-                {
-                    Id = 7,
-                    TitleEn = "Desktop",
-                    TitleFa = "دسک تاپ",
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    ParentCategoryId = 2
-                });
-                Categories.Add(new Category()
-                {
-                    Id = 8,
-                    TitleEn = "Motherboard",
-                    TitleFa = "مادر بورد",
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    ParentCategoryId = 7
-                });
-                Categories.Add(new Category()
-                {
-                    Id = 9,
-                    TitleEn = "Cpu",
-                    TitleFa = "پردازنده مرکزی",
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    ParentCategoryId = 7
-                });
-                Categories.Add(new Category()
-                {
-                    Id = 10,
-                    TitleEn = "Gpu",
-                    TitleFa = "کارت گرافیک",
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    ParentCategoryId = 7
-                });
-                Categories.Add(new Category()
-                {
-                    Id = 11,
-                    TitleEn = "StorageDrive",
-                    TitleFa = "هارد",
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    ParentCategoryId = 7
-                });
-                Categories.Add(new Category()
-                {
-                    Id = 12,
-                    TitleEn = "Review",
-                    TitleFa = "برسی تخصصی",
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    ParentCategoryId = 1
-                });
-                Categories.Add(new Category()
-                {
-                    Id = 13,
-                    TitleEn = "MobilePhone",
-                    TitleFa = "گوشی موبایل",
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    ParentCategoryId = 12
-                });
-                Categories.Add(new Category()
-                {
-                    Id = 14,
-                    TitleEn = "Tablet",
-                    TitleFa = "تلبت",
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    ParentCategoryId = 12
-                });
-                Categories.Add(new Category()
-                {
-                    Id = 15,
-                    TitleEn = "laptop",
-                    TitleFa = "لپ تاپ",
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    ParentCategoryId = 12
-                });
-                Categories.Add(new Category()
-                {
-                    Id = 16,
-                    TitleEn = "Desktop",
-                    TitleFa = "دسک تاپ",
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    ParentCategoryId = 12
-                });
-                Categories.Add(new Category()
-                {
-                    Id = 17,
-                    TitleEn = "Other",
-                    TitleFa = "متفرقه",
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    ParentCategoryId = 1
-                });
-                Categories.Add(new Category()
-                {
-                    Id = 18,
-                    TitleEn = "Advertisement",
-                    TitleFa = "تبلیغات",
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    ParentCategoryId = 17
-                });
-                Categories.Add(new Category()
-                {
-                    Id = 19,
-                    TitleEn = "competition",
-                    TitleFa = "مسابقه",
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    ParentCategoryId = 17
-                });
+            UserRoles.Add(new Microsoft.AspNetCore.Identity.IdentityUserRole<int>()
+            {
+                RoleId = 1,
+                UserId = 1
+            });
+            UserRoles.Add(new Microsoft.AspNetCore.Identity.IdentityUserRole<int>()
+            {
+                RoleId = 2,
+                UserId = 1
+            });
+            UserRoles.Add(new Microsoft.AspNetCore.Identity.IdentityUserRole<int>()
+            {
+                RoleId = 1,
+                UserId = 2
+            });
 
-                //اخبار و مقالات
-                News.Add(new Tables.News()
-                {
-                    Id = 1,
-                    AuthorId = 1,
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    Keywords = "سامسونگ,تلفن هوشمند",
-                    MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/12/s22noteteaser-960x540.png.webp",
-                    SeenCount = 1,
-                    PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
-                    HeadLine = "گلکسی اس 22 نوت نام جدید اس 22 الترا خواهد بود؟",
-                    Title = "گلکسی اس 22 نوت نام جدید اس 22 الترا – به علاوه بنچمارک Geekbench",
-                    PublishDate = new System.DateTime(year: 2021, month: 7, day: 28),
-                    CategoryId = 3,
-                    Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
+            Categories.Add(new Category()
+            {
+                Id = 1,
+                TitleEn = "AllArticles",
+                TitleFa = "همه نوشته  ها",
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1
+            });
+            Categories.Add(new Category()
+            {
+                Id = 2,
+                TitleEn = "Articles",
+                TitleFa = "اخبار و مقالات",
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                ParentCategoryId = 1
+            });
+            Categories.Add(new Category()
+            {
+                Id = 3,
+                TitleEn = "MobilePhone",
+                TitleFa = "گوشی موبایل",
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                ParentCategoryId = 2
+            });
+            Categories.Add(new Category()
+            {
+                Id = 4,
+                TitleEn = "MobilePhoneAccessory",
+                TitleFa = "لوازم جانبی گوشی موبایل",
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                ParentCategoryId = 3
+            });
+            Categories.Add(new Category()
+            {
+                Id = 5,
+                TitleEn = "Tablet",
+                TitleFa = "تبلت",
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                ParentCategoryId = 2
+            });
+            Categories.Add(new Category()
+            {
+                Id = 6,
+                TitleEn = "Laptop",
+                TitleFa = "لپ تاپ",
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                ParentCategoryId = 2
+            });
+            Categories.Add(new Category()
+            {
+                Id = 7,
+                TitleEn = "Desktop",
+                TitleFa = "دسک تاپ",
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                ParentCategoryId = 2
+            });
+            Categories.Add(new Category()
+            {
+                Id = 8,
+                TitleEn = "Motherboard",
+                TitleFa = "مادر بورد",
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                ParentCategoryId = 7
+            });
+            Categories.Add(new Category()
+            {
+                Id = 9,
+                TitleEn = "Cpu",
+                TitleFa = "پردازنده مرکزی",
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                ParentCategoryId = 7
+            });
+            Categories.Add(new Category()
+            {
+                Id = 10,
+                TitleEn = "Gpu",
+                TitleFa = "کارت گرافیک",
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                ParentCategoryId = 7
+            });
+            Categories.Add(new Category()
+            {
+                Id = 11,
+                TitleEn = "StorageDrive",
+                TitleFa = "هارد",
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                ParentCategoryId = 7
+            });
+            Categories.Add(new Category()
+            {
+                Id = 12,
+                TitleEn = "Review",
+                TitleFa = "برسی تخصصی",
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                ParentCategoryId = 1
+            });
+            Categories.Add(new Category()
+            {
+                Id = 13,
+                TitleEn = "MobilePhone",
+                TitleFa = "گوشی موبایل",
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                ParentCategoryId = 12
+            });
+            Categories.Add(new Category()
+            {
+                Id = 14,
+                TitleEn = "Tablet",
+                TitleFa = "تلبت",
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                ParentCategoryId = 12
+            });
+            Categories.Add(new Category()
+            {
+                Id = 15,
+                TitleEn = "laptop",
+                TitleFa = "لپ تاپ",
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                ParentCategoryId = 12
+            });
+            Categories.Add(new Category()
+            {
+                Id = 16,
+                TitleEn = "Desktop",
+                TitleFa = "دسک تاپ",
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                ParentCategoryId = 12
+            });
+            Categories.Add(new Category()
+            {
+                Id = 17,
+                TitleEn = "Other",
+                TitleFa = "متفرقه",
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                ParentCategoryId = 1
+            });
+            Categories.Add(new Category()
+            {
+                Id = 18,
+                TitleEn = "Advertisement",
+                TitleFa = "تبلیغات",
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                ParentCategoryId = 17
+            });
+            Categories.Add(new Category()
+            {
+                Id = 19,
+                TitleEn = "competition",
+                TitleFa = "مسابقه",
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                ParentCategoryId = 17
+            });
+
+            //اخبار و مقالات
+            News.Add(new Tables.News()
+            {
+                Id = 1,
+                AuthorId = 1,
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                Keywords = "سامسونگ,تلفن هوشمند",
+                MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/12/s22noteteaser-960x540.png.webp",
+                SeenCount = 1,
+                PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
+                HeadLine = "گلکسی اس 22 نوت نام جدید اس 22 الترا خواهد بود؟",
+                Title = "گلکسی اس 22 نوت نام جدید اس 22 الترا – به علاوه بنچمارک Geekbench",
+                PublishDate = new System.DateTime(year: 2021, month: 7, day: 28),
+                CategoryId = 3,
+                Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
 
 											
 <p>در ابتدا تصور می‌شد نام پرچمدار آینده کمپانی سامسونگ Galaxy S22 Ultra باشد، حتی با وجود قلم S Pen همراه آن اما حالا یکی از افشاگران ادعا می‌کند که گلکسی اس 22 نوت (Galaxy S22 Note) نام جدید اس 22 الترا خواهد بود و این غول کُره‌ای برندی را انتخاب کرده که به شکل دقیق‌تری نمایانگر اسمارت فون آینده این کمپانی است.</p>
@@ -424,22 +422,22 @@ namespace FakeNews.Database.Config
 												
 											
 										</div>",
-                });
-                News.Add(new Tables.News()
-                {
-                    Id = 2,
-                    AuthorId = 1,
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    Keywords = "اپو,تلفن هوشمند",
-                    MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/12/OPPO-shows-the-unique-camera-feature-you-want-960x540.jpg.webp",
-                    SeenCount = 1,
-                    PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
-                    HeadLine = "فناوری دوربین جمع شونده اوپو چگونه عمل می‌کند؟",
-                    Title = "تماشا کنید: با دوربین جمع شونده اوپو مشکل برآمدگی دوربین‌های گوشی رفع می‌شود",
-                    PublishDate = new System.DateTime(year: 2021, month: 7, day: 29),
-                    CategoryId = 3,
-                    Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
+            });
+            News.Add(new Tables.News()
+            {
+                Id = 2,
+                AuthorId = 1,
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                Keywords = "اپو,تلفن هوشمند",
+                MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/12/OPPO-shows-the-unique-camera-feature-you-want-960x540.jpg.webp",
+                SeenCount = 1,
+                PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
+                HeadLine = "فناوری دوربین جمع شونده اوپو چگونه عمل می‌کند؟",
+                Title = "تماشا کنید: با دوربین جمع شونده اوپو مشکل برآمدگی دوربین‌های گوشی رفع می‌شود",
+                PublishDate = new System.DateTime(year: 2021, month: 7, day: 29),
+                CategoryId = 3,
+                Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
 
 											
 <p>باید قبول کنیم که یکی از ایرادات طراحی چند سال اخیر گوشی‌های هوشمند طراحی برآمدگی دوربین‌ها در قاب پشتی آنها است. اما ظاهرا این مشکل قرار است با فناوری جدید شرکت Oppo برطرف شود. اوپو در اولین روز از رویداد Inno Day 2021 در کنار رونمایی از عینک هوشمند ایر گلس از نمونه اولیه دوربین جمع شونده خود نیز رونمایی کرد.</p>
@@ -493,22 +491,22 @@ namespace FakeNews.Database.Config
 												
 											
 										</div>",
-                });
-                News.Add(new Tables.News()
-                {
-                    Id = 3,
-                    AuthorId = 1,
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    Keywords = "شیائومی,تلفن هوشمند",
-                    MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/12/gsmarena_001-960x540.jpg",
-                    SeenCount = 1,
-                    PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
-                    HeadLine = "جزئیات تکنولوژی جدید باتری شیائومی",
-                    Title = "تکنولوژی جدید باتری شیائومی رونمایی شد – 10 درصد ظرفیت بیشتر",
-                    PublishDate = new System.DateTime(year: 2021, month: 7, day: 29),
-                    CategoryId = 4,
-                    Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
+            });
+            News.Add(new Tables.News()
+            {
+                Id = 3,
+                AuthorId = 1,
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                Keywords = "شیائومی,تلفن هوشمند",
+                MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/12/gsmarena_001-960x540.jpg",
+                SeenCount = 1,
+                PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
+                HeadLine = "جزئیات تکنولوژی جدید باتری شیائومی",
+                Title = "تکنولوژی جدید باتری شیائومی رونمایی شد – 10 درصد ظرفیت بیشتر",
+                PublishDate = new System.DateTime(year: 2021, month: 7, day: 29),
+                CategoryId = 4,
+                Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
 
 											
 <p>شاید بتوان گفت که بزرگترین معضل حال حاضر دنیا در زمینه‌ی دستگاه‌های الکتریکی باتری‌هایشان است. تمامی شرکت‌های تکنولوژيک هم به نوعی در این مسیر قدم نهاده تا شاید نتیجه‌ای حاصل شود. تکنولوژی جدید باتری شیائومی هم حاصل همین تلاش‌هاست که ما را به آینده‌ امیدوارتر می‌کند.</p>
@@ -546,22 +544,22 @@ namespace FakeNews.Database.Config
 												
 											
 										</div>",
-                });
-                News.Add(new Tables.News()
-                {
-                    Id = 4,
-                    AuthorId = 1,
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    Keywords = "اپل,ساعت هوشمند",
-                    MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/12/gsmarena_003-960x540.jpg.webp",
-                    SeenCount = 1,
-                    PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
-                    HeadLine = string.Empty,
-                    Title = "ادعای شاکیان: باتری اپل واچ می‌تواند باعث شکستن صفحه نمایش شود!",
-                    PublishDate = new System.DateTime(year: 2021, month: 7, day: 29),
-                    CategoryId = 4,
-                    Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
+            });
+            News.Add(new Tables.News()
+            {
+                Id = 4,
+                AuthorId = 1,
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                Keywords = "اپل,ساعت هوشمند",
+                MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/12/gsmarena_003-960x540.jpg.webp",
+                SeenCount = 1,
+                PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
+                HeadLine = string.Empty,
+                Title = "ادعای شاکیان: باتری اپل واچ می‌تواند باعث شکستن صفحه نمایش شود!",
+                PublishDate = new System.DateTime(year: 2021, month: 7, day: 29),
+                CategoryId = 4,
+                Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
 
 											
 <p>در جدیدترین شکایت گروهی از مشتریان ساعت‌های مچی هوشمند Apple به نام Apple Watch ادعا شده است، باتری اپل واچ سری 6 می‌تواند باعث شکستن صفحه نمایش و حتی آسیب به کاربران باشد. در این شکایت دسته جمعی، دلیل چنین مشکلی، ایراد در طراحی ساعت مچی اپل واچ سری 6 ذکر شده است.</p>
@@ -611,22 +609,22 @@ namespace FakeNews.Database.Config
 												
 											
 										</div>",
-                });
-                News.Add(new Tables.News()
-                {
-                    Id = 5,
-                    AuthorId = 1,
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    Keywords = "سامسونگ,تبلت هوشمند",
-                    MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/12/Samsung-Galaxy-Tab-S8_0001-960x540.jpg.webp",
-                    SeenCount = 1,
-                    PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
-                    HeadLine = "امتیاز اولین تبلت با اسنپدراگون 8 نسل1 در Geekbench",
-                    Title = "گلکسی Tab S8+، اولین تبلت با اسنپدراگون 8 نسل1 در گیک بنچ رویت شد",
-                    PublishDate = new System.DateTime(year: 2021, month: 7, day: 29),
-                    CategoryId = 5,
-                    Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
+            });
+            News.Add(new Tables.News()
+            {
+                Id = 5,
+                AuthorId = 1,
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                Keywords = "سامسونگ,تبلت هوشمند",
+                MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/12/Samsung-Galaxy-Tab-S8_0001-960x540.jpg.webp",
+                SeenCount = 1,
+                PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
+                HeadLine = "امتیاز اولین تبلت با اسنپدراگون 8 نسل1 در Geekbench",
+                Title = "گلکسی Tab S8+، اولین تبلت با اسنپدراگون 8 نسل1 در گیک بنچ رویت شد",
+                PublishDate = new System.DateTime(year: 2021, month: 7, day: 29),
+                CategoryId = 5,
+                Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
 
 											
 <p>انتظار می‌رود که تبلت‌های سری گلکسی تب S8 در ماه ژانویه سال جدید میلادی و در کنار گوشی‌های سری گلکسی S22 رونمایی شوند. تا امروز اطلاعات نسبتا زیادی در رابطه با مشخصات و طراحی احتمالی آنها لو رفته و تقریبا می‌دانیم که چه محصولاتی در انتظار ما هست. جدیدترین اطلاعات در رابطه با نسل آینده تبلت‌های پرچمدار سامسونگ از Geekbench&nbsp; <a href=""https://twitter.com/evleaks/status/1467761746609938433"">به بیرون درز شده</a> که در آن گلکسی Tab S8+ به عنوان اولین تبلت با چیپست اسنپدراگون 8 نسل1 در این بنچمارک لیست شده است.</p>
@@ -676,22 +674,22 @@ namespace FakeNews.Database.Config
 												
 											
 										</div>",
-                });
-                News.Add(new Tables.News()
-                {
-                    Id = 6,
-                    AuthorId = 1,
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    Keywords = "مایکروسافت,تبلت هوشمند",
-                    MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/12/2021-12-14-image-12-j-960x540.jpg.webp",
-                    SeenCount = 1,
-                    PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
-                    HeadLine = "همکاری مایکروسافت با iFixit و معرفی ابزارهای جدید",
-                    Title = "همکاری مایکروسافت با iFixit – تعمیرپذیری سرفیس ها بیشتر می شود",
-                    PublishDate = new System.DateTime(year: 2021, month: 7, day: 29),
-                    CategoryId = 5,
-                    Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
+            });
+            News.Add(new Tables.News()
+            {
+                Id = 6,
+                AuthorId = 1,
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                Keywords = "مایکروسافت,تبلت هوشمند",
+                MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/12/2021-12-14-image-12-j-960x540.jpg.webp",
+                SeenCount = 1,
+                PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
+                HeadLine = "همکاری مایکروسافت با iFixit و معرفی ابزارهای جدید",
+                Title = "همکاری مایکروسافت با iFixit – تعمیرپذیری سرفیس ها بیشتر می شود",
+                PublishDate = new System.DateTime(year: 2021, month: 7, day: 29),
+                CategoryId = 5,
+                Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
 
 											
 <p>تبلت‌ها و لپ تاپ‌های هیبریدی اگر چه انقلابی در دسته بندی خود رقم زدند اما به واسطه طراحی خاص خود، تعمیر آنها کار دشواریست و اغلب این دستگاه ها امتیاز تعمیرپذیری کمی دریافت می‌کنند. طبیعتا هر چقدر دستگاه قابل تعمیرتر باشد، کاربر احتمالا می‌تواند مدت زمان بیشتری آن را نگه دارد که این موضوع هم از لحاظ اقتصادی و هم از لحاظ محیط زیستی مفیدتر است. سرفیس‌های مایکروسافت از جمله دستگاه‌هایی هستند که با وجود برخورداری از محاسن زیاد و محبوبیت بسیار بالا، تعمیرپذیری بسیار کمی دارند. همکاری مایکروسافت با <a href=""https://www.ifixit.com/News/56078/ifixit-works-with-microsoft-to-manufacture-service-tools-for-repair-techs"" target=""_blank"" rel=""noreferrer noopener"">iFixit </a>که یک کمپانی به نام در زمینه کالبدشکافی دستگاه‌های الکترونیکی است قرار است منجر به ساخت و فروش رسمی ابزار تعمیر سرفیس‌ها به فروشگاه‌های تعمیراتی شود.</p>
@@ -717,22 +715,22 @@ namespace FakeNews.Database.Config
 												
 											
 										</div>",
-                });
-                News.Add(new Tables.News()
-                {
-                    Id = 7,
-                    AuthorId = 1,
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    Keywords = "AMD,لپ تاپ",
-                    MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/12/AMD-Radeon-RX-6000S-RDNA-2-6nm-GPU-Refresh-For-Laptops-960x540.png.webp",
-                    SeenCount = 1,
-                    PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
-                    HeadLine = "گرافیک های لپ تاپی AMD Radeon RX 6000S با فناوری 6 نانومتری",
-                    Title = "گرافیک های لپ تاپی RX 6000S با فناوری 6 نانومتری برای فصل اول 2022",
-                    PublishDate = new System.DateTime(year: 2021, month: 7, day: 29),
-                    CategoryId = 6,
-                    Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
+            });
+            News.Add(new Tables.News()
+            {
+                Id = 7,
+                AuthorId = 1,
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                Keywords = "AMD,لپ تاپ",
+                MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/12/AMD-Radeon-RX-6000S-RDNA-2-6nm-GPU-Refresh-For-Laptops-960x540.png.webp",
+                SeenCount = 1,
+                PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
+                HeadLine = "گرافیک های لپ تاپی AMD Radeon RX 6000S با فناوری 6 نانومتری",
+                Title = "گرافیک های لپ تاپی RX 6000S با فناوری 6 نانومتری برای فصل اول 2022",
+                PublishDate = new System.DateTime(year: 2021, month: 7, day: 29),
+                CategoryId = 6,
+                Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
 
 											
 <p>وب سایت <a href=""https://go.skimresources.com/?id=31026X886738&amp;isjs=1&amp;jv=15.2.1-stackpath&amp;sref=https%3A%2F%2Fwccftech.com%2Famd-allegedly-preps-6nm-radeon-rx-6000s-rdna-2-laptop-gpu-refresh-launching-in-q1-2022%2F&amp;url=https%3A%2F%2Fvideocardz.com%2Fnewz%2Famd-6nm-rdna2-mobile-gpu-refresh-to-be-called-radeon-rx-6000s&amp;xs=1&amp;xtz=-210&amp;xuuid=1bee76dafb410281b41174b861a7c893&amp;xjsf=other_click__auxclick%20%5B2%5D"" target=""_blank"" rel=""noreferrer noopener"">Videocardz</a> گزارش کرده که کمپانی AMD قصد دارد گرافیک های لپ تاپی Radeon RX 6000S با فناوری 6 نانومتری را به زودی به بازار عرضه نماید. با توجه به گزارش منتشر شده تیم سرخ چیپ‌های موبایلی RDNA 2 خود را تحت یک سری رفرش شاید با نام  Radeon RX 6000S عرضه کند. در واقع پسوند S تنها نشانگر این خواهد بود که پردازنده گرافیکی این خانواده رفرش می‌باشد یا خیر.</p>
@@ -770,22 +768,22 @@ namespace FakeNews.Database.Config
 												
 											
 										</div>",
-                });
-                News.Add(new Tables.News()
-                {
-                    Id = 8,
-                    AuthorId = 1,
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    Keywords = "مک بوک,لپ تاپ",
-                    MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/12/macbook-pro-14-and-16_overview__fz0lron5xyuu_og-960x540.png.webp",
-                    SeenCount = 1,
-                    PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
-                    HeadLine = "عرضه مک بوک پرو پایین رده در سال 2022",
-                    Title = "عرضه مک بوک پرو پایین رده در سال 2022 به همراه محصولات بیشتر",
-                    PublishDate = new System.DateTime(year: 2021, month: 7, day: 29),
-                    CategoryId = 6,
-                    Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
+            });
+            News.Add(new Tables.News()
+            {
+                Id = 8,
+                AuthorId = 1,
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                Keywords = "مک بوک,لپ تاپ",
+                MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/12/macbook-pro-14-and-16_overview__fz0lron5xyuu_og-960x540.png.webp",
+                SeenCount = 1,
+                PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
+                HeadLine = "عرضه مک بوک پرو پایین رده در سال 2022",
+                Title = "عرضه مک بوک پرو پایین رده در سال 2022 به همراه محصولات بیشتر",
+                PublishDate = new System.DateTime(year: 2021, month: 7, day: 29),
+                CategoryId = 6,
+                Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
 
 											
 <p>اپل در پروسه فاصله گرفتن از اینتل جلوتر از زمان بندی قرار دارد و برنامه‌های آتی این شرکت عرضه محصولات بیشتر می‌باشد. حالا اخباری از عرضه مک بوک پرو پایین رده در سال 2022 به گوش رسیده که البته در کنار مک‌های جدید دیگری قرار می‌گیرد.</p>
@@ -827,22 +825,22 @@ namespace FakeNews.Database.Config
 												
 											
 										</div>",
-                });
-                News.Add(new Tables.News()
-                {
-                    Id = 9,
-                    AuthorId = 1,
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    Keywords = "قطعات داخلی کامپیوتر,مادربورد,ایسوس",
-                    MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/12/image-960x540.jpg.webp",
-                    SeenCount = 1,
-                    PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
-                    HeadLine = string.Empty,
-                    Title = "ایسوس مادربرد ROG Strix Z690 - G Gaming WiFi را در فرم فاکتور mATX عرضه کرد",
-                    PublishDate = new System.DateTime(year: 2021, month: 7, day: 29),
-                    CategoryId = 8,
-                    Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
+            });
+            News.Add(new Tables.News()
+            {
+                Id = 9,
+                AuthorId = 1,
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                Keywords = "قطعات داخلی کامپیوتر,مادربورد,ایسوس",
+                MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/12/image-960x540.jpg.webp",
+                SeenCount = 1,
+                PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
+                HeadLine = string.Empty,
+                Title = "ایسوس مادربرد ROG Strix Z690 - G Gaming WiFi را در فرم فاکتور mATX عرضه کرد",
+                PublishDate = new System.DateTime(year: 2021, month: 7, day: 29),
+                CategoryId = 8,
+                Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
 
 											
 <p>مادربردهای کوچک و جمع و جور در فرم فاکتور MicroATX امروزه از محبوبیت بسیار بالایی نزد کاربران، حتی کاربران حرفه‌ای و گیمرها برخوردارند. از همین رو سازندگان توجه ویژه‌ای به این محصولات دارند و در تنوع و رده‌های مختلف آنها را وارد بازار می‌کنند. حال ایسوس مادربرد <a href=""https://rog.asus.com/motherboards/rog-strix/rog-strix-z690-g-gaming-wifi-model/"" target=""_blank"" rel=""noreferrer noopener"">ROG Strix Z690-G Gaming WiF</a>i را برای طرفداران نسل دوازدهم پردازنده‌های اینتل آماده کرده است. کسانی که قصد دارند سیستمی بر پایه پلتفرم Alder Lake در فرم SFF جمع کنند می‌توانند بر روی این مادربرد کوچک و توانمند حساب باز کنند.</p>
@@ -868,22 +866,22 @@ namespace FakeNews.Database.Config
 												
 											
 										</div>",
-                });
-                News.Add(new Tables.News()
-                {
-                    Id = 10,
-                    AuthorId = 1,
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    Keywords = "قطعات داخلی کامپیوتر,مادربورد,intel",
-                    MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/12/Intel-Alder-Lake-is-all-of-the-three-kinds-of-chips-set-up-in-the-upcoming-Afgan-Alder-lake-H670-B660-and-H610-allegationally-exposed-are-only-sold-in-each-single-hole-960x540.jpeg.webp",
-                    SeenCount = 1,
-                    PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
-                    HeadLine = "مشخصات فنی چیپست های H670، B660 و H610",
-                    Title = "مشخصات فنی چیپست های H670، B660 و H610 اینتل لو رفت",
-                    PublishDate = new System.DateTime(year: 2021, month: 7, day: 29),
-                    CategoryId = 8,
-                    Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
+            });
+            News.Add(new Tables.News()
+            {
+                Id = 10,
+                AuthorId = 1,
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                Keywords = "قطعات داخلی کامپیوتر,مادربورد,intel",
+                MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/12/Intel-Alder-Lake-is-all-of-the-three-kinds-of-chips-set-up-in-the-upcoming-Afgan-Alder-lake-H670-B660-and-H610-allegationally-exposed-are-only-sold-in-each-single-hole-960x540.jpeg.webp",
+                SeenCount = 1,
+                PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
+                HeadLine = "مشخصات فنی چیپست های H670، B660 و H610",
+                Title = "مشخصات فنی چیپست های H670، B660 و H610 اینتل لو رفت",
+                PublishDate = new System.DateTime(year: 2021, month: 7, day: 29),
+                CategoryId = 8,
+                Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
 
 											
 <p>بنا به شایعات، اینتل چیپست های H670، B660 و H610 را در ژانویه سال 2022 عرضه خواهد کرد اما به لطف افشاگری momomo-us، هم اکنون جزئیاتی در مورد مشخصات فنی این چیپست‌ها در اختیارمان قرار گرفته است. همچون چیپست پرچمدار Z690، سه چیپست H670، B660 و H610 نیز در مدل های DDR4 و DDR5 از لحاظ پشتیبانی رم از راه خواهند رسید. کاربرانی که قصد اورکلاک CPUهای Alder Lake اینتل را داشته باشند، صرفا باید از بین مادربردهای چیپست Z690 انتخاب کنند. بنابراین چیپست‌های رده پائین‌تر بیشتر مناسب پردازنده‌های ضریب بسته هستند. با این حال محدودیتی برای اورکلاک رم بر روی چیپست‌های Z690، H670 و B660 نخواهید داشت، در حالی که H610 از این قابلیت بی بهره است و کاربران باید به فرکانس پیشفرض رم‌های خود اکتفا کنند.</p>
@@ -929,22 +927,22 @@ namespace FakeNews.Database.Config
 												
 											
 										</div>",
-                });
-                News.Add(new Tables.News()
-                {
-                    Id = 11,
-                    AuthorId = 1,
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    Keywords = "قطعات داخلی کامپیوتر,پردازنده مرکزی,Intel",
-                    MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/12/Intelfakebox_00-960x540.jpg.webp",
-                    SeenCount = 1,
-                    PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
-                    HeadLine = string.Empty,
-                    Title = "وجود باکس تقلبی پردازنده های Intel در بازار ایران",
-                    PublishDate = new System.DateTime(year: 2021, month: 7, day: 29),
-                    CategoryId = 9,
-                    Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
+            });
+            News.Add(new Tables.News()
+            {
+                Id = 11,
+                AuthorId = 1,
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                Keywords = "قطعات داخلی کامپیوتر,پردازنده مرکزی,Intel",
+                MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/12/Intelfakebox_00-960x540.jpg.webp",
+                SeenCount = 1,
+                PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
+                HeadLine = string.Empty,
+                Title = "وجود باکس تقلبی پردازنده های Intel در بازار ایران",
+                PublishDate = new System.DateTime(year: 2021, month: 7, day: 29),
+                CategoryId = 9,
+                Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
 
 											
 <p>شرکت معظم اینتل پردازنده های خود را به دو صورت Box و Tray در دنیا عرضه می کند. لغت باکس به معنای جعبه است و به پردازنده هایی گفته می شود که دارای بسته بندی کارخانه جات اینتل هستند و به همان صورت با بسته بندی اورجینال اینتل عرضه می شوند. کلمه Tray به معنای (طَبَق) سینی است و این نوع پردازنده ها بدون هیچ بسته بندی در سینی های چند تایی به دست مصرف کننده می رسند. به دلیل ابعاد کوچک سینی ها، تعداد پردازنده بیشتری را می توان در یک فضا جا داد و آن را حمل کرد. عموما خریداران پردازنده های تِرِی شرکت ها، موسسات، و همچنین سازندگان سیستم های پیش ساخته Pre-Built در دنیا هستند. نکته حائز اهمیت در مورد پردازنده های تِرِی آسیب پذیر بودن آنها نسبت به پردازنده ها باکس است، بنابراین به هنگام خرید این نوع از پردازنده ها، حتما می بایستی تست شوند تا از سلامت آنها اطمینان حاصل شود.</p>
@@ -1094,22 +1092,22 @@ namespace FakeNews.Database.Config
 												
 											
 										</div>",
-                });
-                News.Add(new Tables.News()
-                {
-                    Id = 12,
-                    AuthorId = 1,
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    Keywords = "قطعات داخلی کامپیوتر,پردازنده مرکزی,Ryzen",
-                    MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/12/ULvANzAirbtZr3zjNU3jHG-1200-80-960x540.jpg.webp",
-                    SeenCount = 1,
-                    PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
-                    HeadLine = "اولین نسل از پردازنده های رایزن سازگار با DDR5",
-                    Title = "اولین نسل از پردازنده های رایزن با قابلیت پشتیبانی از رم های DDR5 ظاهر شدند",
-                    PublishDate = new System.DateTime(year: 2021, month: 7, day: 29),
-                    CategoryId = 9,
-                    Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
+            });
+            News.Add(new Tables.News()
+            {
+                Id = 12,
+                AuthorId = 1,
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                Keywords = "قطعات داخلی کامپیوتر,پردازنده مرکزی,Ryzen",
+                MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/12/ULvANzAirbtZr3zjNU3jHG-1200-80-960x540.jpg.webp",
+                SeenCount = 1,
+                PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
+                HeadLine = "اولین نسل از پردازنده های رایزن سازگار با DDR5",
+                Title = "اولین نسل از پردازنده های رایزن با قابلیت پشتیبانی از رم های DDR5 ظاهر شدند",
+                PublishDate = new System.DateTime(year: 2021, month: 7, day: 29),
+                CategoryId = 9,
+                Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
 
 											
 <p>در حال حاضر یکی از مهم ترین برتری‌های پردازنده‌های نسل دوازدهم اینتل، پشتیبانی از نسل بعد حافظه‌های رم می باشد که به غول آبی در مقابل تیم قرمز برتری محسوسی بخشیده اما مسلما قرار نیست این برتری تا مدت زیادی در انحصار اینتل باقی بماند چرا که اولین نسل از پردازنده های رایزن که با رم های DDR5 سازگارند در راه هستند. نمونه آزمایشی پردازنده رایزن AMD با کد شناسایی 100-000000560-40-Y که گفته می‌شود مجهز به 8 هسته و 16 رشته پردازشی می‌باشد توسط فردی ناشناس، با 16 گیگابایت رم که از نوع DDR5 یا LPDDR5 بوده و فرکانس آن 4800 مگاهرتز بوده به ثبت رسیده است. بر اساس شایعات، پردازنده‌های Raphael با معماری Zen 4 و سری Rembrandt پردازنده‌های APU Mobile با معماری Zen 3+ از رم‌های DDR5 پشتیبانی می‌کنند.</p>
@@ -1143,22 +1141,22 @@ namespace FakeNews.Database.Config
 												
 											
 										</div>",
-                });
-                News.Add(new Tables.News()
-                {
-                    Id = 13,
-                    AuthorId = 1,
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    Keywords = "قطعات داخلی کامپیوتر,کارت گرافیک,MSI",
-                    MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/12/HFjRrvXfDiATKdaFyWvo7k-960x540.jpg.webp",
-                    SeenCount = 1,
-                    PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
-                    HeadLine = "کارت گرافیک های گیمینگ MSI با گارانتی آونگ – خرید خوب با خیال راحت",
-                    Title = "کارت گرافیک های گیمینگ MSI با گارانتی آونگ – تنوع بالا برای سلایق و بودجه های مختلف",
-                    PublishDate = new System.DateTime(year: 2021, month: 7, day: 29),
-                    CategoryId = 10,
-                    Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
+            });
+            News.Add(new Tables.News()
+            {
+                Id = 13,
+                AuthorId = 1,
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                Keywords = "قطعات داخلی کامپیوتر,کارت گرافیک,MSI",
+                MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/12/HFjRrvXfDiATKdaFyWvo7k-960x540.jpg.webp",
+                SeenCount = 1,
+                PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
+                HeadLine = "کارت گرافیک های گیمینگ MSI با گارانتی آونگ – خرید خوب با خیال راحت",
+                Title = "کارت گرافیک های گیمینگ MSI با گارانتی آونگ – تنوع بالا برای سلایق و بودجه های مختلف",
+                PublishDate = new System.DateTime(year: 2021, month: 7, day: 29),
+                CategoryId = 10,
+                Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
 
 											
 <p>امروزه تاکید ما بر خرید سخت افزار کامپیوتر با یک گارانتی معتبر بیشتر از هر زمان دیگریست. برای تاکید بر این موضوع نیز دلیل قدرتمندی داریم آن هم این است که امروزه با توجه به وضعیت بازار، بسیاری از محصولات با قیمت‌های نامتعارف به فروش می‌رسند و از طرف دیگر، واقعیت مسئله این است که کمپانی‌ها با نهایت سرعت و ظرفیت خود در حال فعالیت هستند و در طول دو سه سال اخیر کم راجع به خطاهای فنی و انسانی در تولید سخت افزارهای مختلف نشنیده‌ایم. به همین دلیل خرید یک محصول با گارانتی معتبر می‌تواند در این شرایط خیال کاربر را تا حد زیادی راحت کند. در مورد کارت گرافیک‌ها مسائل مذکور بیشتر از سایر قطعات قابل درک است. خوشبختانه آونگ، یکی از شرکت‌های خوشنام وارد کننده سخت افزار به تازگی <a href=""https://www.msi.com/Graphics-Cards"" target=""_blank"" rel=""noreferrer noopener"">کارت گرافیک های گیمینگ MSI</a> را وارد بازار کشورمان کرده که اتفاق بسیار خوبی برای جامعه گیمرهای داخل ایران محسوب می‌شود.</p>
@@ -1220,22 +1218,22 @@ namespace FakeNews.Database.Config
 												
 											
 										</div>",
-                });
-                News.Add(new Tables.News()
-                {
-                    Id = 14,
-                    AuthorId = 1,
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    Keywords = "قطعات داخلی کامپیوتر,کارت گرافیک,AMD Radeon",
-                    MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/…lCWaokvC3og1AjIC39PE11i35rmC-zvE-960x540.jpg.webp",
-                    SeenCount = 1,
-                    PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
-                    HeadLine = string.Empty,
-                    Title = "کارت گرافیک Radeon RX 6500XT و 6400 پاورکالر از طریق EEC تائید شد",
-                    PublishDate = new System.DateTime(year: 2021, month: 7, day: 29),
-                    CategoryId = 10,
-                    Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
+            });
+            News.Add(new Tables.News()
+            {
+                Id = 14,
+                AuthorId = 1,
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                Keywords = "قطعات داخلی کامپیوتر,کارت گرافیک,AMD Radeon",
+                MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/…lCWaokvC3og1AjIC39PE11i35rmC-zvE-960x540.jpg.webp",
+                SeenCount = 1,
+                PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
+                HeadLine = string.Empty,
+                Title = "کارت گرافیک Radeon RX 6500XT و 6400 پاورکالر از طریق EEC تائید شد",
+                PublishDate = new System.DateTime(year: 2021, month: 7, day: 29),
+                CategoryId = 10,
+                Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
 
 											
 <p>اتحادیه اقتصادی اروپا موسوم به EEC لیستی که شامل 10 کارت گرافیک Radeon RX 6500XT و همچنین 6 مدل از گرافیک Radeon RX 6400 را منتشر کرده که طبق شایعات هر دو این مدل از گرافیک‌های AMD مجهز به واحد پردازنده گرافیکی Navi 24 هستند. همچنین این لیست تائید می‌کند که کارت گرافیک‌های مذکور مجهز به 4 گیگابایت حافظه GDDR6 هستند و خبری هم از مدل‌های 2 یا 8 گیگابایتی نیست. نکته قابل توجه این لیست، تائید کارت گرافیک Radeon RX 6400 می‌باشد که طبق اطلاعات قبلی، این کارت نیازی به کانکتورهای تغذیه اکسترنال ندارد و به عنوان یک مدل رده پائین وارد بازار خواهد شد و اولین کارت گرافیک رده پائین از سری گرافیک‌های Radeon RX6000/RDNA تیم قرمز محسوب می‌شود.</p>
@@ -1267,22 +1265,22 @@ namespace FakeNews.Database.Config
 												
 											
 										</div>",
-                });
-                News.Add(new Tables.News()
-                {
-                    Id = 15,
-                    AuthorId = 1,
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    Keywords = "قطعات داخلی کامپیوتر,هارد,خرابی",
-                    MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/…ound-broken-hd-wallpaper-preview-960x540.jpg.webp",
-                    SeenCount = 1,
-                    PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
-                    HeadLine = string.Empty,
-                    Title = "علائم خرابی هارد دیسک لپ تاپ و کامپیوتر رومیزی",
-                    PublishDate = new System.DateTime(year: 2021, month: 7, day: 29),
-                    CategoryId = 11,
-                    Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
+            });
+            News.Add(new Tables.News()
+            {
+                Id = 15,
+                AuthorId = 1,
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                Keywords = "قطعات داخلی کامپیوتر,هارد,خرابی",
+                MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/…ound-broken-hd-wallpaper-preview-960x540.jpg.webp",
+                SeenCount = 1,
+                PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
+                HeadLine = string.Empty,
+                Title = "علائم خرابی هارد دیسک لپ تاپ و کامپیوتر رومیزی",
+                PublishDate = new System.DateTime(year: 2021, month: 7, day: 29),
+                CategoryId = 11,
+                Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
 
 											
 <p>از دست رفتن اطلاعات یکی از ناگوارترین اتفاقاتی است که برای کاربران کامپیوتر می‌افتد. دانستن علائم خرابی هارد می‌تواند کمک کند تا پیش از آنکه هارد به کلی از کار بیوفتد، نسبت به تهیه فایل پشتیبان اقدام کنیم. قبل از هر چیز همواره توصیه می‌شود با توجه به اهمیت اطلاعات کامپیوتر باید به همان نسبت برای حفظ اطلاعات هزینه کنیم.</p>
@@ -1408,22 +1406,22 @@ namespace FakeNews.Database.Config
 												
 											
 										</div>",
-                });
-                News.Add(new Tables.News()
-                {
-                    Id = 16,
-                    AuthorId = 1,
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    Keywords = "قطعات داخلی کامپیوتر,هارد,ttt",
-                    MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/12/35435435-960x540.jpg.webp",
-                    SeenCount = 1,
-                    PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
-                    HeadLine = "CMR در برابر SMR",
-                    Title = "برای سیستم‌های خانگی هارد دیسک‌های SMR نخرید! به دنبال مدلهای CMR باشید!",
-                    PublishDate = new System.DateTime(year: 2021, month: 7, day: 29),
-                    CategoryId = 11,
-                    Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
+            });
+            News.Add(new Tables.News()
+            {
+                Id = 16,
+                AuthorId = 1,
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                Keywords = "قطعات داخلی کامپیوتر,هارد,ttt",
+                MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/12/35435435-960x540.jpg.webp",
+                SeenCount = 1,
+                PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
+                HeadLine = "CMR در برابر SMR",
+                Title = "برای سیستم‌های خانگی هارد دیسک‌های SMR نخرید! به دنبال مدلهای CMR باشید!",
+                PublishDate = new System.DateTime(year: 2021, month: 7, day: 29),
+                CategoryId = 11,
+                Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
 
 											
 <h2 id=""h-""><strong>مقدمه</strong></h2>
@@ -1537,22 +1535,22 @@ namespace FakeNews.Database.Config
 												
 											
 										</div>",
-                });
-                News.Add(new Tables.News()
-                {
-                    Id = 17,
-                    AuthorId = 1,
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    Keywords = "هوآوی,تلفن هوشمند",
-                    MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/11/Huawei-nova-8-Review-DSC00278-1920x930.jpg.webp",
-                    SeenCount = 1,
-                    PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
-                    HeadLine = "بررسی تخصصی گوشی نوا 8 هواوی",
-                    Title = "بررسی گوشی نوا 8 هواوی – شبه پرچمدار جدید چینی",
-                    PublishDate = new System.DateTime(year: 2021, month: 7, day: 28),
-                    CategoryId = 13,
-                    Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
+            });
+            News.Add(new Tables.News()
+            {
+                Id = 17,
+                AuthorId = 1,
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                Keywords = "هوآوی,تلفن هوشمند",
+                MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/11/Huawei-nova-8-Review-DSC00278-1920x930.jpg.webp",
+                SeenCount = 1,
+                PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
+                HeadLine = "بررسی تخصصی گوشی نوا 8 هواوی",
+                Title = "بررسی گوشی نوا 8 هواوی – شبه پرچمدار جدید چینی",
+                PublishDate = new System.DateTime(year: 2021, month: 7, day: 28),
+                CategoryId = 13,
+                Body = @"<div itemprop=""articleBody"" class=""entry-inner"">
 											
 <p>گوشی‌های سری نوا Nova &nbsp;هواوی همواره از محصولات جذاب این شرکت هستند که تحت عنوان “شبه پرچمدار” با مشخصات خوب و ظاهری جذاب راهی بازار می‌شوند. گوشی نوا 8 هواوی (Huawei Nova 8) یکی از جدیدترین محصولات این خانواده است که امروز تصمیم داریم بررسی آن را با شما به اشتراک بگذاریم.</p>
 
@@ -2308,22 +2306,22 @@ namespace FakeNews.Database.Config
 
 <span data-sr=""enter"" class=""gk-review clearfix""><span class=""gk-review-sum""><span class=""gk-review-sum-value"" data-final=""0.9""><span>9</span></span><span class=""gk-review-sum-label"">امتیاز</span></span><span class=""gk-review-partials""><span class=""gk-review-partial""><span class=""gk-review-partial-value"" data-final=""0.89""><span>8.9</span></span><span class=""gk-review-partial-label"">سخت‌افزار</span></span><span class=""gk-review-partial""><span class=""gk-review-partial-value"" data-final=""0.93""><span>9.3</span></span><span class=""gk-review-partial-label"">صفحه نمایش</span></span><span class=""gk-review-partial""><span class=""gk-review-partial-value"" data-final=""0.89""><span>8.9</span></span><span class=""gk-review-partial-label"">دوربین</span></span><span class=""gk-review-partial""><span class=""gk-review-partial-value"" data-final=""0.85""><span>8.5</span></span><span class=""gk-review-partial-label"">صدا</span></span><span class=""gk-review-partial""><span class=""gk-review-partial-value"" data-final=""0.92""><span>9.2</span></span><span class=""gk-review-partial-label"">طراحی</span></span><span class=""gk-review-partial""><span class=""gk-review-partial-value"" data-final=""0.92""><span>9.2</span></span><span class=""gk-review-partial-label"">باتری</span></span><span class=""gk-review-partial""><span class=""gk-review-partial-value"" data-final=""0.87""><span>8.7</span></span><span class=""gk-review-partial-label"">ارزش خرید</span></span></span></span>
 																																																									</div>",
-                });
-                News.Add(new Tables.News()
-                {
-                    Id = 18,
-                    AuthorId = 1,
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    Keywords = "سامسونگ,تلفن هوشمند",
-                    MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/11/Samsung-Galaxy-A52s-5G-28301-1920x930.jpg.webp",
-                    SeenCount = 1,
-                    PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
-                    HeadLine = "بررسی گلکسی A52s سامسونگ",
-                    Title = "بررسی گوشی گلکسی A52s سامسونگ – بهترین میان‌رده سامسونگ",
-                    PublishDate = new System.DateTime(year: 2021, month: 7, day: 28),
-                    CategoryId = 13,
-                    Body = @"<div itemprop=""articleBody"" class=""entry - inner"">
+            });
+            News.Add(new Tables.News()
+            {
+                Id = 18,
+                AuthorId = 1,
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                Keywords = "سامسونگ,تلفن هوشمند",
+                MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/11/Samsung-Galaxy-A52s-5G-28301-1920x930.jpg.webp",
+                SeenCount = 1,
+                PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
+                HeadLine = "بررسی گلکسی A52s سامسونگ",
+                Title = "بررسی گوشی گلکسی A52s سامسونگ – بهترین میان‌رده سامسونگ",
+                PublishDate = new System.DateTime(year: 2021, month: 7, day: 28),
+                CategoryId = 13,
+                Body = @"<div itemprop=""articleBody"" class=""entry - inner"">
 
 < p > فکر می‌کنم این جمله را تقریبا در اول تمام بررسی‌هایی گوشی‌های Galaxy A سامسونگ گفته‌ام که در چند سال اخیر، گوشی‎‌های این خانواده به شدت محبوب و پرطرفدار شده‌اند.طراحی زیبا از یک طرف و ارائه مشخصات خوب و مشتری پسند در قالب گوشی‌های غیرپرچمدار دلیل اصلی محبوبیت این سری به حساب می‌آید.گوشی‌های سری Galaxy A50 مانند A52s اعضای میانی این خانواده هستند که از نظر مشخصات و قیمت در سطح میانی(بالاتر از A1، A2 و … و پایین‌تر از A7) قرار دارند.به‌طورکلی شاید بتوان اعضای سری A50 را از نظر اندازه، مشخصات و قیمت ایده‌آل‌ترین اعضای خانواده Galaxy A نامید.گوشی گلکسی A52s سامسونگ یکی از جدیدترین اعضای این سری است که امروز قصد بررسی آن را داریم.</ p >
 
@@ -3236,22 +3234,22 @@ namespace FakeNews.Database.Config
 
 <p></p>
 																																																									</div>",
-                });
-                News.Add(new Tables.News()
-                {
-                    Id = 19,
-                    AuthorId = 1,
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    Keywords = "سامسونگ,تبلت هوشمند",
-                    MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/01/DSC_0292-1920x930.jpg.webp",
-                    SeenCount = 1,
-                    PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
-                    HeadLine = "بررسی گلکسی تب A7 2020 سامسونگ",
-                    Title = "بررسی گلکسی تب A7 2020 سامسونگ – میان‌رده جدید و خوش قیمت",
-                    PublishDate = new System.DateTime(year: 2021, month: 7, day: 28),
-                    CategoryId = 14,
-                    Body = @"<div itemprop=""articleBody"" class=""entry - inner"">
+            });
+            News.Add(new Tables.News()
+            {
+                Id = 19,
+                AuthorId = 1,
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                Keywords = "سامسونگ,تبلت هوشمند",
+                MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/01/DSC_0292-1920x930.jpg.webp",
+                SeenCount = 1,
+                PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
+                HeadLine = "بررسی گلکسی تب A7 2020 سامسونگ",
+                Title = "بررسی گلکسی تب A7 2020 سامسونگ – میان‌رده جدید و خوش قیمت",
+                PublishDate = new System.DateTime(year: 2021, month: 7, day: 28),
+                CategoryId = 14,
+                Body = @"<div itemprop=""articleBody"" class=""entry - inner"">
 
 < p > سامسونگ اواخر تابستان تبلت 10 اینچی اقتصادی جدید خود را معرفی و راهی بازار کرد.امروز در این مطلب با بررسی گلکسی تب A7 2020 سامسونگ در خدمت شما عزیزان هستیم.با ما همراه باشید.</ p >
 
@@ -3640,22 +3638,22 @@ namespace FakeNews.Database.Config
 
 <span data-sr=""enter"" class=""gk-review clearfix""><span class=""gk-review-sum""><span class=""gk-review-sum-value"" data-final=""0.87""><span>8.7</span></span><span class=""gk-review-sum-label"">امتیاز</span></span><span class=""gk-review-partials""><span class=""gk-review-partial""><span class=""gk-review-partial-value"" data-final=""0.85""><span>8.5</span></span><span class=""gk-review-partial-label"">سخت‌افزار</span></span><span class=""gk-review-partial""><span class=""gk-review-partial-value"" data-final=""0.87""><span>8.7</span></span><span class=""gk-review-partial-label"">نرم‌افزار</span></span><span class=""gk-review-partial""><span class=""gk-review-partial-value"" data-final=""0.82""><span>8.2</span></span><span class=""gk-review-partial-label"">صفحه نمایش</span></span><span class=""gk-review-partial""><span class=""gk-review-partial-value"" data-final=""0.8""><span>8</span></span><span class=""gk-review-partial-label"">دوربین</span></span><span class=""gk-review-partial""><span class=""gk-review-partial-value"" data-final=""0.92""><span>9.2</span></span><span class=""gk-review-partial-label"">صدا</span></span><span class=""gk-review-partial""><span class=""gk-review-partial-value"" data-final=""0.91""><span>9.1</span></span><span class=""gk-review-partial-label"">طراحی</span></span><span class=""gk-review-partial""><span class=""gk-review-partial-value"" data-final=""0.89""><span>8.9</span></span><span class=""gk-review-partial-label"">باتری</span></span><span class=""gk-review-partial""><span class=""gk-review-partial-value"" data-final=""0.92""><span>9.2</span></span><span class=""gk-review-partial-label"">ارزش خرید</span></span></span></span>
 																																																									</div>",
-                });
-                News.Add(new Tables.News()
-                {
-                    Id = 20,
-                    AuthorId = 1,
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    Keywords = "ششش,تبلت هوشمند",
-                    MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/08/huawei-Matepad-10.4--1920x930.jpg.webp",
-                    SeenCount = 1,
-                    PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
-                    HeadLine = "بررسی میت پد 10.4 هواوی",
-                    Title = "بررسی میت پد 10.4 هواوی – یک تبلت اقتصادی و خوش قیمت",
-                    PublishDate = new System.DateTime(year: 2021, month: 7, day: 28),
-                    CategoryId = 14,
-                    Body = @"<div itemprop=""articleBody"" class=""entry - inner"">
+            });
+            News.Add(new Tables.News()
+            {
+                Id = 20,
+                AuthorId = 1,
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                Keywords = "ششش,تبلت هوشمند",
+                MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/08/huawei-Matepad-10.4--1920x930.jpg.webp",
+                SeenCount = 1,
+                PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
+                HeadLine = "بررسی میت پد 10.4 هواوی",
+                Title = "بررسی میت پد 10.4 هواوی – یک تبلت اقتصادی و خوش قیمت",
+                PublishDate = new System.DateTime(year: 2021, month: 7, day: 28),
+                CategoryId = 14,
+                Body = @"<div itemprop=""articleBody"" class=""entry - inner"">
 
 < p > در روزهایی که به واسطه ویروس کرونا بسیاری از مدارس در سراسر کشور به صورت مجازی کلاس‌های خود را دایر می‌کنند، استفاده از تبلت توسط دانش‌آموزان بسیار رایج شده است.امروز با بررسی میت پد 10.4 هواوی یکی از تبلت‌های اقتصادی بازار در خدمت شما هستیم.با ما همراه باشید.</ p >
 
@@ -4288,22 +4286,22 @@ namespace FakeNews.Database.Config
 
 <p></p>
 																																																									</div>",
-                });
-                News.Add(new Tables.News()
-                {
-                    Id = 21,
-                    AuthorId = 1,
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    Keywords = "MSI,لپ تاپ",
-                    MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/07/MSI-GF63-THIN-10SCSR_00-1920x930.jpg.webp",
-                    SeenCount = 1,
-                    PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
-                    HeadLine = string.Empty,
-                    Title = "بررسی لپتاپ گیمینگ ام اس آی مدل MSI GF63 THIN 10SCSR",
-                    PublishDate = new System.DateTime(year: 2021, month: 7, day: 28),
-                    CategoryId = 15,
-                    Body = @"<div itemprop=""articleBody"" class=""entry - inner"">
+            });
+            News.Add(new Tables.News()
+            {
+                Id = 21,
+                AuthorId = 1,
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                Keywords = "MSI,لپ تاپ",
+                MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/07/MSI-GF63-THIN-10SCSR_00-1920x930.jpg.webp",
+                SeenCount = 1,
+                PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
+                HeadLine = string.Empty,
+                Title = "بررسی لپتاپ گیمینگ ام اس آی مدل MSI GF63 THIN 10SCSR",
+                PublishDate = new System.DateTime(year: 2021, month: 7, day: 28),
+                CategoryId = 15,
+                Body = @"<div itemprop=""articleBody"" class=""entry - inner"">
 
 < p > سال گذشته میلادی برای محصولات لپتاپ شرکت MSI، سالی بسیار پر رونق و پر فروش بوده است.این شرکت فقط در نیمه اول سال 2020 بیش از 200 میلیون < a href = ""https://sakhtafzarmag.com/tag/%d9%84%d9%be-%d8%aa%d8%a7%d9%be/"" > لپتاپ </ a > گیمینگ در بازارهای جهانی به فروش رساند، که رکوردی بی سابقه در بازار محسوب می‌شود.علاقه بسیار زیادی به لپتاپ‌های گیمینگ MSI در میان تمامی ‌رده‌های کاربری وجود دارد.طراحی ظاهری جذاب، کارایی بالا، نرم افزار‌های جانبی کاربردی، کولینگ اختصاصی، و استفاده از کامپوننت‌های با کیفیت از جمله خصوصیات مثبت لپتاپ‌های ام اس آی به شمار می‌رود.امروز در لابراتوار سایت سخت افزار به بررسی یکی از لپتاپ‌های گیمینگ ام اس آی می‌پردازیم که در ایران هم موجود است و از قضا یکی از پر فروش ترین محصولات حال حاضر بازار به شمار می‌رود.لپتاپ گیمینگ ام اس آی GF63 THIN 10SCSR با پارت نامبر 464XML در رده پایه Entry Level لپتاپ‌های گیمینگ MSI طبقه بندی می‌شود و به نوعی یک گزینه اقتصادی برای گیمر‌ها با بودجه محدود است.</ p >
 
@@ -4811,22 +4809,22 @@ namespace FakeNews.Database.Config
 
 <span data-sr=""enter"" class=""gk-review clearfix""><span class=""gk-review-sum""><span class=""gk-review-sum-value"" data-final=""0.84""><span>8.4</span></span><span class=""gk-review-sum-label"">امتیاز</span></span><span class=""gk-review-partials""><span class=""gk-review-partial""><span class=""gk-review-partial-value"" data-final=""0.85""><span>8.5</span></span><span class=""gk-review-partial-label"">پرفورمنس</span></span><span class=""gk-review-partial""><span class=""gk-review-partial-value"" data-final=""0.89""><span>8.9</span></span><span class=""gk-review-partial-label"">صفحه‌نمایش</span></span><span class=""gk-review-partial""><span class=""gk-review-partial-value"" data-final=""0.68""><span>6.8</span></span><span class=""gk-review-partial-label"">کولینگ لپتاپ</span></span><span class=""gk-review-partial""><span class=""gk-review-partial-value"" data-final=""0.9""><span>9</span></span><span class=""gk-review-partial-label"">طراحی‌ظاهری</span></span><span class=""gk-review-partial""><span class=""gk-review-partial-value"" data-final=""0.85""><span>8.5</span></span><span class=""gk-review-partial-label"">باطری</span></span><span class=""gk-review-partial""><span class=""gk-review-partial-value"" data-final=""0.83""><span>8.3</span></span><span class=""gk-review-partial-label"">کیبورد و تاچ پد</span></span><span class=""gk-review-partial""><span class=""gk-review-partial-value"" data-final=""0.88""><span>8.8</span></span><span class=""gk-review-partial-label"">ارزش خرید</span></span></span></span>
 																																																									</div>",
-                });
-                News.Add(new Tables.News()
-                {
-                    Id = 22,
-                    AuthorId = 1,
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    Keywords = "GIGABYTE,لپ تاپ",
-                    MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/10/GIGABYTE-AERO-15-OLED-XD_00-1920x930.jpg.webp",
-                    SeenCount = 1,
-                    PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
-                    HeadLine = string.Empty,
-                    Title = "بررسی لپتاپ مخصوص طراحی گیگابایت مدل GIGABYTE AERO 15 OLED XD",
-                    PublishDate = new System.DateTime(year: 2021, month: 7, day: 28),
-                    CategoryId = 15,
-                    Body = @"<div itemprop=""articleBody"" class=""entry - inner"">
+            });
+            News.Add(new Tables.News()
+            {
+                Id = 22,
+                AuthorId = 1,
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                Keywords = "GIGABYTE,لپ تاپ",
+                MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/10/GIGABYTE-AERO-15-OLED-XD_00-1920x930.jpg.webp",
+                SeenCount = 1,
+                PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
+                HeadLine = string.Empty,
+                Title = "بررسی لپتاپ مخصوص طراحی گیگابایت مدل GIGABYTE AERO 15 OLED XD",
+                PublishDate = new System.DateTime(year: 2021, month: 7, day: 28),
+                CategoryId = 15,
+                Body = @"<div itemprop=""articleBody"" class=""entry - inner"">
 
 < p > شرکت گیگابایت از سال 2017، سری لپتاپ‌های Workstation خود را تحت خانواده Aero به بازار عرضه کرده است.اگر خانواده Aorus را سری مخصوص گیمینگ در نظر بگیریم، لپتاپ‌های Aero، سری مخصوص تولید کنندگان محتوی و رندرکاران به شمار می‌رود.بسیاری از پاور یوزرهایی که لپتاپ‌های & nbsp; رده بالای گیمینگ تهیه می‌کنند، بیشتر برای استفاده از قدرت بالای سخت افزار آنها برای اهدافی به غیر از گیمینگ است. اینجاست که گیگابایت، سری Aero را مخصوص این کاربران طراحی و عرضه کرده است.در حقیقت، لپتاپ‌های آئرو به مانند یک ایستگاه کاری حرفه ای، عملکردی در سطح بالا، برای انجام امور جدی دارد.اما، لزوما همه چیز به کار محدود نمی‌شود، از آنجایی که تجهیزات به کار رفته در این نوع لپتاپ‌ها بسیار رده بالاست، از آن می‌توان برای مصارف گیمینگ هم استفاده کرد.پس در کلاس آئرو اول کار در اولویت است، و بعد کارهای دیگر مانند بازی در رده دوم اهمیت قرار می‌گیرند.</ p >
  
@@ -5434,22 +5432,22 @@ namespace FakeNews.Database.Config
 
 <span data-sr=""enter"" class=""gk-review clearfix""><span class=""gk-review-sum""><span class=""gk-review-sum-value"" data-final=""0.94""><span>9.4</span></span><span class=""gk-review-sum-label"">امتیاز</span></span><span class=""gk-review-partials""><span class=""gk-review-partial""><span class=""gk-review-partial-value"" data-final=""0.98""><span>9.8</span></span><span class=""gk-review-partial-label"">پرفورمنس</span></span><span class=""gk-review-partial""><span class=""gk-review-partial-value"" data-final=""0.99""><span>9.9</span></span><span class=""gk-review-partial-label"">صفحه نمایش</span></span><span class=""gk-review-partial""><span class=""gk-review-partial-value"" data-final=""0.9""><span>9</span></span><span class=""gk-review-partial-label"">کولینگ لپتاپ</span></span><span class=""gk-review-partial""><span class=""gk-review-partial-value"" data-final=""0.94""><span>9.4</span></span><span class=""gk-review-partial-label"">طراحی ظاهری</span></span><span class=""gk-review-partial""><span class=""gk-review-partial-value"" data-final=""0.95""><span>9.5</span></span><span class=""gk-review-partial-label"">باطری</span></span><span class=""gk-review-partial""><span class=""gk-review-partial-value"" data-final=""0.94""><span>9.4</span></span><span class=""gk-review-partial-label"">صفحه کلید و تاچ پد</span></span><span class=""gk-review-partial""><span class=""gk-review-partial-value"" data-final=""0.89""><span>8.9</span></span><span class=""gk-review-partial-label"">ارزش خرید</span></span></span></span>
 																																																									</div>",
-                });
-                News.Add(new Tables.News()
-                {
-                    Id = 23,
-                    AuthorId = 1,
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    Keywords = "ASUS,دسک تاپ",
-                    MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/11/ASUS-ROG-STRIX-Z690-F-GAMING_00-1920x930.jpg.webp",
-                    SeenCount = 1,
-                    PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
-                    HeadLine = "آشنایی با پردازنده‌های Alder Lake و چیپست Z690",
-                    Title = "بررسی اجمالی مادربرد ایسوس ASUS ROG STRIX Z690-F GAMING WIFI",
-                    PublishDate = new System.DateTime(year: 2021, month: 7, day: 28),
-                    CategoryId = 16,
-                    Body = @"<div itemprop=""articleBody"" class=""entry - inner"">
+            });
+            News.Add(new Tables.News()
+            {
+                Id = 23,
+                AuthorId = 1,
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                Keywords = "ASUS,دسک تاپ",
+                MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2021/11/ASUS-ROG-STRIX-Z690-F-GAMING_00-1920x930.jpg.webp",
+                SeenCount = 1,
+                PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
+                HeadLine = "آشنایی با پردازنده‌های Alder Lake و چیپست Z690",
+                Title = "بررسی اجمالی مادربرد ایسوس ASUS ROG STRIX Z690-F GAMING WIFI",
+                PublishDate = new System.DateTime(year: 2021, month: 7, day: 28),
+                CategoryId = 16,
+                Body = @"<div itemprop=""articleBody"" class=""entry - inner"">
 
 < p > از امروز کلیه مادربرد‌های Z690 ایسوس در بازار ایران عرضه خواهند شد.البته برای تهیه پردازنده‌ها و رمهای DDR5 کمی‌ به فرصت بیشتری نیاز هست تا آنها هم کم کم وارد بازار شوند.به یمن ورود نسل جدید پردازنده‌های Alder Lake، چند هفته پیش ویندوز 11 رونمایی شد، رمهای DDR5 وارد بازار می‌شوند و ظرف چند ماه آینده اولین کارت گرافیک PCIe Gen.5 جهان هم وارد بازار خواهد شد.بدین ترتیب شاهد یک نقطه عطف در تاریخ صنعت کامپیوتر هستیم که به واسطه نوآوری شرکت اینتل، تعداد زیادی از قطعات جدید را همزمان تجربه خواهیم کرد.نسل جدید مادربرد‌های چیپست Z690 حرفهای زیادی برای گفتن دارند.این مادربرد‌ها نسبت به نسل گذشته خود، چند پله ارتقا یافته اند.سوکت جدید LGA1700 با خود پشتیبانی از PCIe Gen.5 را در کنار رمهای DDR5 به همراه آورده است.شرکت ایسوس بزرگترین تولید کنندگان مادربرد در دنیا با عرضه ده‌ها مدل مادربرد Z690، محصولات متنوعی را برای استفاده کاربران از جدیدترین فن آوری اینتل ارائه کرده است.امروز برای اولین بار در ایران، به بررسی اجمالی مادربرد ایسوس ASUS ROG STRIX Z690 - F GAMING WIFI می‌پردازیم که از طرف نماینده رسمی‌‌ ایسوس در ایران در اختیار ما قرار گرفته است.بدیهی است بررسی کامل این مادربرد را در ادامه این مقاله در آینده، تقدیم شما دوستان خواهیم کرد.اما ابتدا، کمی‌‌ در مورد تغییرات بزرگ این پلتفرم جدید و پردازنده‌های آن صحبت خواهیم کرد و سپس به آنباکس و بررسی مادربرد می‌پردازیم.</ p >
 
@@ -5737,22 +5735,22 @@ namespace FakeNews.Database.Config
 
 <p><strong>در این قسمت به بررسی اجمالی این مادربرد پرداختیم، در بخش دوم تست با پردازنده و همچنین امکانات دیگر را خواهیم پرداخت که در ظرف روزهای آینده در ادامه همین مقاله منتشر خواهیم کرد.</strong></p>
 																																																									</div>",
-                });
-                News.Add(new Tables.News()
-                {
-                    Id = 24,
-                    AuthorId = 1,
-                    CreatedOn = System.DateTime.Now,
-                    CreatorId = 1,
-                    Keywords = "کولر,دسک تاپ",
-                    MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2018/03/k2_items_src_0b3ace58bed7bf765a81a5be8df96b7c-960x540.jpg.webp",
-                    SeenCount = 1,
-                    PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
-                    HeadLine = string.Empty,
-                    Title = "بررسی کولر زیبا و خنکCooler Master MasterAir MA620P",
-                    PublishDate = new System.DateTime(year: 2021, month: 7, day: 28),
-                    CategoryId = 16,
-                    Body = @"<div itemprop=""articleBody"" class=""entry - inner"">
+            });
+            News.Add(new Tables.News()
+            {
+                Id = 24,
+                AuthorId = 1,
+                CreatedOn = System.DateTime.Now,
+                CreatorId = 1,
+                Keywords = "کولر,دسک تاپ",
+                MainImageUri = "https://sakhtafzarmag.com/wp-content/uploads/2018/03/k2_items_src_0b3ace58bed7bf765a81a5be8df96b7c-960x540.jpg.webp",
+                SeenCount = 1,
+                PublicId = System.Guid.Parse("E2955EF9-9B01-4D1D-BA67-5C88CFA9DC21"),
+                HeadLine = string.Empty,
+                Title = "بررسی کولر زیبا و خنکCooler Master MasterAir MA620P",
+                PublishDate = new System.DateTime(year: 2021, month: 7, day: 28),
+                CategoryId = 16,
+                Body = @"<div itemprop=""articleBody"" class=""entry - inner"">
 
                                             < p > تعداد شرکت های قابل اتکا در طراحی و تولید ایرکولرهای حرفه ای مجهز به لوله های انتقال حرارت یا Heat - Pipes، از تعداد انگشتان یک دست هم کمتر است.در میان این شمار محدود، شرکت کولر مستر، یکی از بهترین هاست که دقیقا حرفه اش مرتبط با طراحی و تولید انواع سیستم های گرمایشی و کنترل دما است.کولر مستر در سال 2001 اولین کولر پردازنده مجهز به لوله های دفع کننده حرارت یا Heat - Pipes را تولید کرد.</ p >
 < p >< span id = ""more-22474"" ></ span ></ p >
@@ -5829,38 +5827,105 @@ namespace FakeNews.Database.Config
 												
 											
 										</div>",
-                });
+            });
 
-                Comments.Add(new Comment()
+            Comments.Add(new Comment()
+            {
+                Id = 1,
+                NewsId = 1,
+                SenderName = "محمدمهدی حمزه",
+                SenderMail = "m.hamzeh@yahoo.com",
+                Text = "کامنت اول",
+                CreatedOn = System.DateTime.Now,
+                PublicId = Guid.NewGuid()
+            });
+            Comments.Add(new Comment()
+            {
+                Id = 2,
+                NewsId = 1,
+                SenderName = "محمدمهدی حمزه",
+                SenderMail = "m.hamzeh@yahoo.com",
+                Text = "کامنت دوم",
+                CreatedOn = System.DateTime.Now,
+                PublicId = Guid.NewGuid()
+            });
+            Comments.Add(new Comment()
+            {
+                Id = 3,
+                NewsId = 1,
+                SenderName = "محمدمهدی حمزه",
+                SenderMail = "m.hamzeh@yahoo.com",
+                Text = "کامنت سوم",
+                CreatedOn = System.DateTime.Now,
+                PublicId = Guid.NewGuid()
+            });
+
+            GC.Collect();
+        }
+
+        private bool IsDataSeeded()
+        {
+            if (File.Exists("SeedData.Json") is true)
+            {
+                var json = File.ReadAllText("SeedData.Json");
+
+                if (string.IsNullOrWhiteSpace(json) is false)
                 {
-                    Id = 1,
-                    NewsId = 1,
-                    SenderName = "محمدمهدی حمزه",
-                    SenderMail = "m.hamzeh@yahoo.com",
-                    Text = "کامنت اول",
-                    CreatedOn = System.DateTime.Now,
-                    PublicId = Guid.NewGuid()
-                });
-                Comments.Add(new Comment()
+                    var data = Newtonsoft.Json.JsonConvert.DeserializeObject<FullDbSet>(json);
+
+                    json = null;
+                    System.GC.Collect();
+
+                    Users.AddRange(data.Users);
+                    Roles.AddRange(data.Roles);
+                    UserRoles.AddRange(data.UserRoles);
+                    Categories.AddRange(data.Categories);
+                    News.AddRange(data.News);
+                    Comments.AddRange(data.Comments);
+
+                    data = null;
+                    System.GC.Collect();
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        private async Task<bool> IsDataSeededAsync()
+        {
+            try
+            {
+                if (File.Exists("SeedData.Json") is true)
                 {
-                    Id = 2,
-                    NewsId = 1,
-                    SenderName = "محمدمهدی حمزه",
-                    SenderMail = "m.hamzeh@yahoo.com",
-                    Text = "کامنت دوم",
-                    CreatedOn = System.DateTime.Now,
-                    PublicId = Guid.NewGuid()
-                });
-                Comments.Add(new Comment()
-                {
-                    Id = 3,
-                    NewsId = 1,
-                    SenderName = "محمدمهدی حمزه",
-                    SenderMail = "m.hamzeh@yahoo.com",
-                    Text = "کامنت سوم",
-                    CreatedOn = System.DateTime.Now,
-                    PublicId = Guid.NewGuid()
-                });
+                    var json = await File.ReadAllTextAsync("SeedData.Json");
+
+                    if (string.IsNullOrWhiteSpace(json) is false)
+                    {
+                        var data = Newtonsoft.Json.JsonConvert.DeserializeObject<FullDbSet>(json);
+
+                        json = null;
+
+                        await Task.WhenAll(Users.AddRangeAsync(data.Users),
+                            Roles.AddRangeAsync(data.Roles),
+                            UserRoles.AddRangeAsync(data.UserRoles),
+                            Categories.AddRangeAsync(data.Categories),
+                            News.AddRangeAsync(data.News),
+                            Comments.AddRangeAsync(data.Comments));
+
+                        data = null;
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            finally
+            {
+                GC.Collect();
             }
         }
 
@@ -5870,24 +5935,15 @@ namespace FakeNews.Database.Config
             var jsonSerializerSetting = new Newtonsoft.Json.JsonSerializerSettings() { ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore };
             var dbContextJson = Newtonsoft.Json.JsonConvert.SerializeObject(tables, jsonSerializerSetting);
 
-            if (System.IO.File.Exists("SeedData.Json"))
-            {
-                System.IO.File.Delete("SeedData.Json");
-            }
-
-            System.IO.File.WriteAllText("SeedData.Json", dbContextJson, System.Text.Encoding.UTF8);
+            File.WriteAllText("SeedData.Json", dbContextJson, System.Text.Encoding.UTF8);
         }
         private async Task GenerateSeedDataFileAsync()
         {
             var tables = new FullDbSet(this);
             var jsonSerializerSetting = new Newtonsoft.Json.JsonSerializerSettings() { ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore };
             var dbContextJson = Newtonsoft.Json.JsonConvert.SerializeObject(tables, jsonSerializerSetting);
-            if (System.IO.File.Exists("SeedData.Json"))
-            {
-                System.IO.File.Delete("SeedData.Json");
-            }
 
-            await System.IO.File.WriteAllTextAsync("SeedData.Json", dbContextJson, System.Text.Encoding.UTF8);
+            await File.WriteAllTextAsync("SeedData.Json", dbContextJson, System.Text.Encoding.UTF8);
         }
 
         
