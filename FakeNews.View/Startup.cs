@@ -20,27 +20,46 @@ namespace FakeNews.View
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, UserManager<User> userManager)
         {
             Configuration = configuration;
+            _userManager = userManager;
         }
 
         public IConfiguration Configuration { get; }
+        private readonly UserManager<User> _userManager;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>();
 
+            var dbContext = new ApplicationDbContext();
+            dbContext.Database.Migrate();
+
             services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 ;
 
-            new ApplicationDbContext().Seed();
+            _ = _userManager.CreateAsync(new User()
+            {
+                Email = "mohammadmahdi.hamzeh@yahoo.com",
+                UserName = "MM_Hamzeh",
+                CreatedOn = DateTime.Now,
+                IsDeleted = false,
+                LockoutEnabled = false,
+                PublicId = Guid.Parse("57D8F436-99E8-43A3-8751-8EFCD0B6B3AB"),
+                NormalizedEmail = "mohammadmahdi.hamzeh@yahoo.com".Normalize(),
+                NormalizedUserName = "MM_Hamzeh".Normalize(),
+                PhoneNumber = "09386114201",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
+                CreatorId = 1
+            },
+           "password").Result;
 
-            //var seedDbTask = new Task(() => new ApplicationDbContext().SeedAsync());
-            //seedDbTask.Start();
-
+            dbContext.Seed();
+            dbContext.Dispose();
             services.AddRazorPages();
 
             FakeNews.Services.Helper.IocHandler.ResolveUnitOfWorkIoc(services);
@@ -63,10 +82,6 @@ namespace FakeNews.View
 
                 seoInfo.SetLocales("fa", new string[] { "fa-IR" });
             });
-
-
-
-            //seedDbTask.Wait();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
