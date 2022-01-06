@@ -1,5 +1,7 @@
 ﻿using FakeNews.Common.Database.Interfaces;
 using FakeNews.Database.Config;
+using FakeNews.Database.Tables.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -170,18 +172,20 @@ namespace FakeNews.Services.Repository
 
         #region Ctor
 
+        private readonly UserManager<User> _userManager;
         private ApplicationDbContext _dbContext = null;
         private readonly DbSet<T> _entities = null;
         private bool _isDisposed;
         private object lockObj;
 
-        public GenericRepository(IUnitOfWork unitOfWork) : this(unitOfWork.Context)
+        public GenericRepository(IUnitOfWork unitOfWork, UserManager<User> userManager) : this(unitOfWork.Context, userManager)
         {
 
         }
 
-        public GenericRepository(ApplicationDbContext context)
+        public GenericRepository(ApplicationDbContext context, UserManager<User> userManager)
         {
+            _userManager = userManager;
             _isDisposed = false;
             _dbContext = context;
             _entities = _dbContext.Set<T>();

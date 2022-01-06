@@ -15,5 +15,6 @@ namespace FakeNews.Database.Tables
 
         public News News { get; set; }
         public int NewsId { get; set; }
+
     }
 }

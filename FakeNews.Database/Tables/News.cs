@@ -20,7 +20,7 @@ namespace FakeNews.Database.Tables
         public User Author { get; set; }
 
 
-        public Category Category { get; set; }
+        public CategoryDto Category { get; set; }
         public int CategoryId { get; set; }
 
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();

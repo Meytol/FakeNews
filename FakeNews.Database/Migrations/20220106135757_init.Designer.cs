@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FakeNews.Database.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211230094324_initialize")]
-    partial class initialize
+    [Migration("20220106135757_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -33,6 +33,10 @@ namespace FakeNews.Database.Migrations
 
                     b.Property<int>("CreatorId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -57,9 +61,9 @@ namespace FakeNews.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ParentCategoryId");
-
                     b.ToTable("Categories");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Category");
                 });
 
             modelBuilder.Entity("FakeNews.Database.Tables.Comment", b =>
@@ -302,49 +306,6 @@ namespace FakeNews.Database.Migrations
                     b.ToTable("News");
                 });
 
-            modelBuilder.Entity("FakeNews.Database.Tables.NewsUserSeen", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Count")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("CreatorId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("ModifierId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NewsId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("PublicId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("ViewerId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NewsId");
-
-                    b.HasIndex("ViewerId");
-
-                    b.ToTable("NewsUserSeens");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.Property<int>("Id")
@@ -446,12 +407,13 @@ namespace FakeNews.Database.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("FakeNews.Database.Tables.Category", b =>
+            modelBuilder.Entity("FakeNews.Database.Tables.CategoryDto", b =>
                 {
-                    b.HasOne("FakeNews.Database.Tables.Category", "ParentCategory")
-                        .WithMany("ChildCategories")
-                        .HasForeignKey("ParentCategoryId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                    b.HasBaseType("FakeNews.Database.Tables.Category");
+
+                    b.HasIndex("ParentCategoryId");
+
+                    b.HasDiscriminator().HasValue("CategoryDto");
                 });
 
             modelBuilder.Entity("FakeNews.Database.Tables.Comment", b =>
@@ -466,29 +428,14 @@ namespace FakeNews.Database.Migrations
             modelBuilder.Entity("FakeNews.Database.Tables.News", b =>
                 {
                     b.HasOne("FakeNews.Database.Tables.Identity.User", "Author")
-                        .WithMany()
+                        .WithMany("AuthorNews")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FakeNews.Database.Tables.Category", "Category")
+                    b.HasOne("FakeNews.Database.Tables.CategoryDto", "Category")
                         .WithMany("News")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("FakeNews.Database.Tables.NewsUserSeen", b =>
-                {
-                    b.HasOne("FakeNews.Database.Tables.News", "News")
-                        .WithMany()
-                        .HasForeignKey("NewsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FakeNews.Database.Tables.Identity.User", "Viewer")
-                        .WithMany()
-                        .HasForeignKey("ViewerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -542,6 +489,13 @@ namespace FakeNews.Database.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("FakeNews.Database.Tables.CategoryDto", b =>
+                {
+                    b.HasOne("FakeNews.Database.Tables.CategoryDto", "ParentCategory")
+                        .WithMany("ChildCategories")
+                        .HasForeignKey("ParentCategoryId");
                 });
 #pragma warning restore 612, 618
         }

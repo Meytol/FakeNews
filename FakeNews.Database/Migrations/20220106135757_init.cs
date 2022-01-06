@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FakeNews.Database.Migrations
 {
-    public partial class initialize : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -74,7 +74,8 @@ namespace FakeNews.Database.Migrations
                     IsDeleted = table.Column<bool>(nullable: false),
                     TitleEn = table.Column<string>(nullable: true),
                     TitleFa = table.Column<string>(nullable: true),
-                    ParentCategoryId = table.Column<int>(nullable: true)
+                    ParentCategoryId = table.Column<int>(nullable: true),
+                    Discriminator = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -83,7 +84,8 @@ namespace FakeNews.Database.Migrations
                         name: "FK_Categories_Categories_ParentCategoryId",
                         column: x => x.ParentCategoryId,
                         principalTable: "Categories",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -260,39 +262,6 @@ namespace FakeNews.Database.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "NewsUserSeens",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    PublicId = table.Column<Guid>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
-                    CreatorId = table.Column<int>(nullable: false),
-                    ModifiedOn = table.Column<DateTime>(nullable: true),
-                    ModifierId = table.Column<int>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    Count = table.Column<int>(nullable: false),
-                    ViewerId = table.Column<int>(nullable: false),
-                    NewsId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_NewsUserSeens", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_NewsUserSeens_News_NewsId",
-                        column: x => x.NewsId,
-                        principalTable: "News",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_NewsUserSeens_AspNetUsers_ViewerId",
-                        column: x => x.ViewerId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -351,16 +320,6 @@ namespace FakeNews.Database.Migrations
                 name: "IX_News_CategoryId",
                 table: "News",
                 column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_NewsUserSeens_NewsId",
-                table: "NewsUserSeens",
-                column: "NewsId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_NewsUserSeens_ViewerId",
-                table: "NewsUserSeens",
-                column: "ViewerId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -382,9 +341,6 @@ namespace FakeNews.Database.Migrations
 
             migrationBuilder.DropTable(
                 name: "Comments");
-
-            migrationBuilder.DropTable(
-                name: "NewsUserSeens");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

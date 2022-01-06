@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -20,51 +21,48 @@ namespace FakeNews.View
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, UserManager<User> userManager)
+        public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            _userManager = userManager;
         }
 
         public IConfiguration Configuration { get; }
-        private readonly UserManager<User> _userManager;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>();
 
-            var dbContext = new ApplicationDbContext();
-            dbContext.Database.Migrate();
-
             services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
-                ;
+                .AddUserManager<User>()
+                .AddSignInManager<User>()
+                .AddRoleManager<Role>();
 
-            _ = _userManager.CreateAsync(new User()
-            {
-                Email = "mohammadmahdi.hamzeh@yahoo.com",
-                UserName = "MM_Hamzeh",
-                CreatedOn = DateTime.Now,
-                IsDeleted = false,
-                LockoutEnabled = false,
-                PublicId = Guid.Parse("57D8F436-99E8-43A3-8751-8EFCD0B6B3AB"),
-                NormalizedEmail = "mohammadmahdi.hamzeh@yahoo.com".Normalize(),
-                NormalizedUserName = "MM_Hamzeh".Normalize(),
-                PhoneNumber = "09386114201",
-                EmailConfirmed = true,
-                PhoneNumberConfirmed = true,
-                CreatorId = 1
-            },
-           "password").Result;
-
-            dbContext.Seed();
-            dbContext.Dispose();
-            services.AddRazorPages();
+            //var userStore = new UserStore<User, Role, ApplicationDbContext, int>(new ApplicationDbContext());
+            //_ = userStore.CreateAsync(new User()
+            //{
+            //    Id = 1,
+            //    Email = "mohammadmahdi.hamzeh@yahoo.com",
+            //    UserName = "MM_Hamzeh",
+            //    CreatedOn = DateTime.Now,
+            //    IsDeleted = false,
+            //    LockoutEnabled = false,
+            //    PublicId = Guid.Parse("57D8F436-99E8-43A3-8751-8EFCD0B6B3AB"),
+            //    NormalizedEmail = "mohammadmahdi.hamzeh@yahoo.com".Normalize(),
+            //    NormalizedUserName = "MM_Hamzeh".Normalize(),
+            //    PhoneNumber = "09386114201",
+            //    EmailConfirmed = true,
+            //    PhoneNumberConfirmed = true,
+            //    CreatorId = 1,
+            //    PasswordHash = "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8"
+            //}).Result;
 
             FakeNews.Services.Helper.IocHandler.ResolveUnitOfWorkIoc(services);
             FakeNews.Services.Helper.IocHandler.ResolveServicesIoc(services);
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddRazorPages();
 
             services.AddSeoTags(seoInfo =>
             {

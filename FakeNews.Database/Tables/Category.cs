@@ -9,10 +9,17 @@ namespace FakeNews.Database.Tables
         public string TitleEn { get; set; }
         public string TitleFa { get; set; }
 
-        public Category ParentCategory { get; set; }
         public int? ParentCategoryId { get; set; }
 
-        public ICollection<Category> ChildCategories { get; set; } = new HashSet<Category>();
         public ICollection<News> News { get; set; } = new HashSet<News>();
+    }
+
+    public class CategoryDto : Category
+    {
+        public CategoryDto ParentCategory { get; set; }
+
+
+        public ICollection<CategoryDto> ChildCategories { get; set; } = new HashSet<CategoryDto>();
+
     }
 }

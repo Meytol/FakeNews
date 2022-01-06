@@ -36,7 +36,7 @@ namespace FakeNews.View.Pages
                 RecentNews = getNewsResponse.Data;
             }
 
-            ServiceResponse<IEnumerable<Category>> getCategoriesResponse = await _categoryService.GetCategoriesTreeView(parent: 1);
+            ServiceResponse<IEnumerable<CategoryDto>> getCategoriesResponse = await _categoryService.GetCategoriesTreeView(parent: 1);
 
             if (getCategoriesResponse.IsSuccessful is true)
             {
@@ -45,7 +45,7 @@ namespace FakeNews.View.Pages
         }
 
         public IEnumerable<News> RecentNews { get; set; } = new List<News>();
-        public IEnumerable<Category> TreeviewCategories { get; set; } = new List<Category>();
+        public IEnumerable<CategoryDto> TreeviewCategories { get; set; } = new List<CategoryDto>();
 
     }
 }
