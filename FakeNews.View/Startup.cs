@@ -35,9 +35,10 @@ namespace FakeNews.View
 
             services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddUserManager<User>()
-                .AddSignInManager<User>()
-                .AddRoleManager<Role>();
+                //.AddUserManager<User>()
+                //.AddSignInManager<User>()
+                //.AddRoleManager<Role>()
+                ;
 
             //var userStore = new UserStore<User, Role, ApplicationDbContext, int>(new ApplicationDbContext());
             //_ = userStore.CreateAsync(new User()

@@ -172,20 +172,18 @@ namespace FakeNews.Services.Repository
 
         #region Ctor
 
-        private readonly UserManager<User> _userManager;
         private ApplicationDbContext _dbContext = null;
         private readonly DbSet<T> _entities = null;
         private bool _isDisposed;
         private object lockObj;
 
-        public GenericRepository(IUnitOfWork unitOfWork, UserManager<User> userManager) : this(unitOfWork.Context, userManager)
+        public GenericRepository(IUnitOfWork unitOfWork) : this(unitOfWork.Context)
         {
 
         }
 
-        public GenericRepository(ApplicationDbContext context, UserManager<User> userManager)
+        public GenericRepository(ApplicationDbContext context)
         {
-            _userManager = userManager;
             _isDisposed = false;
             _dbContext = context;
             _entities = _dbContext.Set<T>();

@@ -30,13 +30,13 @@ namespace FakeNews.View.Pages
                 RedirectToPage(pageName: "Index");
             }
 
-            CurrentCategory = (CategoryDto)((await _categoryService.Get(catId)).Data ?? new CategoryDto());
-            ChildCategories = (await _categoryService.GetCategoriesTreeView(catId)).Data.ToList() ?? new List<CategoryDto>() ;
+            CurrentCategory = (Category)((await _categoryService.Get(catId)).Data ?? new Category());
+            ChildCategories = (await _categoryService.GetCategoriesTreeView(catId)).Data.ToList() ?? new List<Category>() ;
             CategoryNews = (await _categoryService.GetNewsByCategoryId(catId)).Data ?? new List<News>();
         }
 
-        public CategoryDto CurrentCategory { get; set; }
-        public IList<CategoryDto> ChildCategories { get; set; }
+        public Category CurrentCategory { get; set; }
+        public IList<Category> ChildCategories { get; set; }
         public IList<News> CategoryNews { get; set; }
     }
 }

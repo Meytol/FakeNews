@@ -50,6 +50,13 @@ namespace FakeNews.Database.Config
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
 
+            builder.Entity<Category>()
+                .HasOne(e => e.ParentCategory)
+                .WithMany(e => e.ChildCategories)
+                .HasForeignKey(e => e.ParentCategoryId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.NoAction);
+
             builder.Seed();
 
             base.OnModelCreating(builder);

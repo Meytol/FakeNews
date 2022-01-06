@@ -14,7 +14,7 @@ namespace FakeNews.Services.ModelServices
         Task<ServiceResponse<Category>> Add(Category model, int currentUserId);
         Task<ServiceResponse<Category>> Update(Category model, int currentUserId);
         Task<ServiceResponse> Delete(int id, int currentUserId);
-        Task<ServiceResponse<IEnumerable<CategoryDto>>> GetCategoriesTreeView(int parent = 0, IEnumerable<CategoryDto> cachedCategories = null);
+        Task<ServiceResponse<IEnumerable<Category>>> GetCategoriesTreeView(int parent = 0, IEnumerable<Category> cachedCategories = null);
         Task<ServiceResponse<IList<News>>> GetNewsByCategoryId(int categoryId, bool getChildsContent = true);
         Task<ServiceResponse<Category>> Get(int categoryId);
 
@@ -37,11 +37,11 @@ namespace FakeNews.Services.ModelServices
 
         #region Select
 
-        public async Task<ServiceResponse<IEnumerable<CategoryDto>>> GetCategoriesTreeView(int parentId = 0, IEnumerable<CategoryDto> cachedCategories = null)
+        public async Task<ServiceResponse<IEnumerable<Category>>> GetCategoriesTreeView(int parentId = 0, IEnumerable<Category> cachedCategories = null)
         {
-            var allCategories = cachedCategories ?? (await _repository.SelectAll()).Select(i => (CategoryDto)i);
+            var allCategories = cachedCategories ?? (await _repository.SelectAll()).Select(i => (Category)i);
 
-            var categoriesTreeView = new List<CategoryDto>();
+            var categoriesTreeView = new List<Category>();
 
             foreach (var cat1 in allCategories.Where(i => parentId == 0 ? i.ParentCategoryId == null : i.ParentCategoryId == parentId))
             {
@@ -55,7 +55,7 @@ namespace FakeNews.Services.ModelServices
                 categoriesTreeView.Add(cat1);
             }
 
-            return new ServiceResponse<IEnumerable<CategoryDto>>(categoriesTreeView, HttpStatusCode.OK);
+            return new ServiceResponse<IEnumerable<Category>>(categoriesTreeView, HttpStatusCode.OK);
         }
 
         public async Task<ServiceResponse<IList<News>>> GetNewsByCategoryId(int categoryId, bool getChildsContent = true)
