@@ -12,7 +12,7 @@
 </div>
 
 <div class="row mb-4">
-    <div class="col col-6 ">
+    <div class="col col-12 col-xl-6 mb-4">
         <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
             <!-- Carousel indicators -->
             <ol class="carousel-indicators">
@@ -55,7 +55,7 @@
                                 </p>
                                 <a href="/News?id=@item.Id" class="btn btn-primary">ادامه خبر </a>
 
-                                <p class="card-text">
+                                <p class="card-text mb-4">
                                     <small class="text-muted">
                                         <span>
                                             نوشته شده توسط
@@ -119,12 +119,12 @@
             </a>
         </div>
     </div>
-    <div class="col col-6">
+    <div class="col col-12 col-xl-6">
         <div class="row">
             @foreach (var item in Model.RecentNews.Take(4))
             {
-                <div class="col col-6">
-                    <div class="card mb-1">
+                <div class="col col-12 col-lg-6">
+                    <div class="card mb-3">
                         <img src="@item.MainImageUri" class="card-img-top" alt="@item.Keywords" style="max-width: 300px; max-height: 150px">
                         <div class="card-body">
                             <h5 class="card-title">
@@ -200,32 +200,28 @@
 </div>
 <hr />
 
-<div class="row mb-4">
-    <partial name="_DoubleRowAd" />
-</div>
+
+
+<partial name="_DoubleRowAd" />
 <hr />
 
 @await Component.InvokeAsync("RecentNewsByCategory", 3)
 <hr />
 
-<div class="row mb-4">
-    <partial name="_DoubleRowAd" />
-</div>
+<partial name="_DoubleRowAd" />
 <hr />
 
 @await Component.InvokeAsync("RecentNewsByCategory", 5)
 <hr />
-<div class="row mb-4">
-    <partial name="_DoubleRowAd" />
-</div>
+
+<partial name="_DoubleRowAd" />
 <hr />
 
 
 @await Component.InvokeAsync("RecentNewsByCategory", 6)
 <hr />
-<div class="row mb-4">
-    <partial name="_DoubleRowAd" />
-</div>
+
+<partial name="_DoubleRowAd" />
 <hr />
 
 

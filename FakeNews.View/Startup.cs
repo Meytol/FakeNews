@@ -68,7 +68,7 @@ namespace FakeNews.View
             services.AddSeoTags(seoInfo =>
             {
                 seoInfo.SetSiteInfo(
-                    siteTitle: "اخبار غیر موثق - محمدمهدی حمزه",
+                    siteTitle: "محمدمهدی حمزه",
                     siteTwitterId: "@MM_Hamzeh",  //optional
                     siteFacebookId: "https://facebook.com/mohammadmahdi_hamzeh",  //optional
                     robots: "index, follow"  //optional
@@ -109,6 +109,11 @@ namespace FakeNews.View
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+                //endpoints.MapAreaControllerRoute(
+                    //name: "default",
+                    //areaName: "admin",
+                    //pattern: "{area:exists}/Controller/Action/{Id?:int}"
+                    //);
             });
         }
     }

@@ -15,14 +15,12 @@ namespace FakeNews.View.Pages.Shared
     {
         private readonly ILogger<IndexModel> _logger;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly INewsService _newsService;
         private readonly ICategoryService _categoryService;
         public RecentNewsByCategory(ILogger<IndexModel> logger, IUnitOfWork unitOfWork)
         {
             _logger = logger;
             _unitOfWork = unitOfWork;
 
-            _newsService = new NewsService(_unitOfWork);
             _categoryService = new CategoryService(_unitOfWork);
         }
 
@@ -33,6 +31,7 @@ namespace FakeNews.View.Pages.Shared
                 return null;
             }
 
+            CatId = catId;
             var categoryResponse = await _categoryService.GetNewsByCategoryId(catId, true);
 
             if (categoryResponse.IsSuccessful is false || categoryResponse.Data is null)
@@ -46,6 +45,7 @@ namespace FakeNews.View.Pages.Shared
             return View(viewName: "Default", model: this);
         }
 
+        public int CatId { get; set; } = 0;
         public IList<News> RecentNews { get; set; } = new List<News>();
         public Category CurrentCategory { get; set; } = new Category();
     }

@@ -1,6 +1,6 @@
 ﻿@model FakeNews.View.Pages.Shared.RecentNewsByCategory
 @{
-
+    var @myCarouselid = "Carousel" + Model.CatId;
 }
 
 <h2>
@@ -11,14 +11,14 @@
 </h2>
 
 <div class="row mb-4 mt-2">
-    <div class="col col-6 ">
-        <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="col col-12 col-xl-6 mb-4">
+        <div id="@myCarouselid" class="carousel slide" data-bs-ride="carousel">
             <!-- Carousel indicators -->
             <ol class="carousel-indicators">
 
                 @for (int i = 0; i < Model.RecentNews.Count(); i++)
                 {
-                    <li data-bs-target="#myCarousel" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "") bg-dark" ></li>
+                    <li data-bs-target="#@myCarouselid" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "") bg-dark" ></li>
                 }
             </ol>
 
@@ -54,7 +54,7 @@
                                 </p>
                                 <a href="/News?id=@item.Id" class="btn btn-primary">ادامه خبر </a>
 
-                                <p class="card-text">
+                                <p class="card-text mb-4">
                                     <small class="text-muted">
                                         <span>
                                             نوشته شده توسط
@@ -110,20 +110,20 @@
             </div>
 
             <!-- Carousel controls -->
-            <a class="carousel-control-prev mt-auto mb-auto" href="#myCarousel" data-bs-slide="prev" style="height: 25%">
+            <a class="carousel-control-prev mt-auto mb-auto" href="#@myCarouselid" data-bs-slide="prev" style="height: 25%">
                 <span class="carousel-control-prev-icon bg-dark"></span>
             </a>
-            <a class="carousel-control-next mt-auto mb-auto" href="#myCarousel" data-bs-slide="next" style="height: 25%">
+            <a class="carousel-control-next mt-auto mb-auto" href="#@myCarouselid" data-bs-slide="next" style="height: 25%">
                 <span class="carousel-control-next-icon bg-dark "></span>
             </a>
         </div>
     </div>
-    <div class="col col-6">
+    <div class="col col-12 col-xl-6">
         <div class="row">
             @foreach (var item in Model.RecentNews.Take(4))
             {
-                <div class="col col-6">
-                    <div class="card mb-1">
+                <div class="col col-12 col-lg-6">
+                    <div class="card mb-3">
                         <img src="@item.MainImageUri" class="card-img-top" alt="@item.Keywords" style="max-width: 300px; max-height: 150px">
                         <div class="card-body">
                             <h5 class="card-title">
