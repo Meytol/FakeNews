@@ -6,14 +6,14 @@
 
 @{
     Html.SetSeoInfo(seoInfo =>
-                                {
-                                    seoInfo.SetArticleInfo(
-                                        authorName: Model?.DesiredNews?.Author?.UserName ?? "",
-                                        publishDate: Model?.DesiredNews?.PublishDate ?? DateTime.Now,
-                                        authorUrl: "/Category?catId=" + (Model?.DesiredNews?.Author?.PublicId ?? Guid.Empty).ToString(),  //optional
-                                        section: Model.DesiredNews?.Category?.TitleFa ?? ""
-                                    );
-                                });
+                                        {
+                                            seoInfo.SetArticleInfo(
+                                                authorName: Model?.DesiredNews?.Author?.UserName ?? "",
+                                                publishDate: Model?.DesiredNews?.PublishDate ?? DateTime.Now,
+                                                authorUrl: "/Category?catId=" + (Model?.DesiredNews?.Author?.PublicId ?? Guid.Empty).ToString(),  //optional
+                                                section: Model.DesiredNews?.Category?.TitleFa ?? ""
+                                            );
+                                        });
 }
 <div class="row mb-4">
     <div class="col col-10">
@@ -33,7 +33,7 @@
                 <span>
                     دسته بندی:
                     <a href="/Category?catId=@Model.DesiredNews.CategoryId" class="link-info">
-                        @Model.DesiredNews.Category.TitleFa  
+                        @Model.DesiredNews.Category.TitleFa
                     </a>
                 </span>
             </h4>
@@ -49,14 +49,12 @@
         </div>
     </div>
     <div class="col col-2">
-        <div class="col col-12">
-            <partial name="_SidebarAd" />
-        </div>
+        <partial name="_SidebarAd" />
     </div>
 </div>
 
 
-<div class="row" id="comments"> 
+<div class="row" id="comments">
     <h3 class="heading">
         <i class="far fa-comments"></i>
         @Model.Comments.Count
