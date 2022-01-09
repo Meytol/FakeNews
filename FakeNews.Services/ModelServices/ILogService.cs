@@ -32,6 +32,8 @@ namespace FakeNews.Services.ModelServices
         public async Task<ServiceResponse<Log>> Add(Log model, int currentUserId)
         {
             await _repository.Insert(model, currentUserId);
+            var rowsAffected = await _unitOfWork.Save();
+            return new ServiceResponse<Log>(model);
         }
 
         public async Task AddError(Exception ex, int currentUserId = 0)
