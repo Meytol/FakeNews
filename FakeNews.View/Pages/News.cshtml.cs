@@ -19,77 +19,103 @@ namespace FakeNews.View.Pages
         private readonly INewsService _newsService;
         private readonly IAntiforgery _antiForgeryHandler;
         private readonly ICommentService _commentService;
+        private readonly ILogService _logService;
 
         public NewsModel(IUnitOfWork unitOfWork, IAntiforgery antiForgeryHandler)
         {
             _unitOfWork = unitOfWork;
             _newsService = new NewsService(_unitOfWork);
             _commentService = new CommentService(_unitOfWork);
+            _logService = new LogService(_unitOfWork);
             _antiForgeryHandler = antiForgeryHandler;
         }
 
 
         public async Task OnGetAsync(int id = 0)
         {
-            if (id == 0)
+            try
             {
-                RedirectToPage(pageName: "Index");
-                return;
-            }
+                if (id == 0)
+                {
+                    RedirectToPage(pageName: "Index");
+                    return;
+                }
 
-            await FillPageModelData(newsId: id);            
+                await FillPageModelData(newsId: id);
+            }
+            catch (Exception e)
+            {
+                await _logService.AddError(e);
+                RedirectToPage(pageName: "Index");
+            }      
         }
 
         public async Task OnPostAsync(string senderNameText, string senderMailText, string newCommentText, int newsId)
         {
-            await _antiForgeryHandler.ValidateRequestAsync(HttpContext);
-
-            var senderName = senderNameText.Trim();
-            var senderMail = senderMailText.Trim();
-            var comment = newCommentText.Trim();
-
-            if (string.IsNullOrEmpty(senderName) || senderName.Length > 50)
+            try
             {
-                RedirectToPage(pageName: "Index");
-                return;
+                await _antiForgeryHandler.ValidateRequestAsync(HttpContext);
+
+                var senderName = senderNameText.Trim();
+                var senderMail = senderMailText.Trim();
+                var comment = newCommentText.Trim();
+
+                if (string.IsNullOrEmpty(senderName) || senderName.Length > 50)
+                {
+                    RedirectToPage(pageName: "Index");
+                    return;
+                }
+
+                if (string.IsNullOrEmpty(senderMail) || senderMail.Length > 50 || Regex.IsMatch(senderMail, @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$") is false)
+                {
+                    RedirectToPage(pageName: "Index");
+                    return;
+                }
+
+                if (string.IsNullOrEmpty(comment) || comment.Length > 500)
+                {
+                    RedirectToPage(pageName: "Index");
+                    return;
+                }
+
+                await _commentService.Add(new Comment()
+                {
+                    Text = newCommentText,
+                    SenderName = senderNameText,
+                    SenderMail = senderMailText,
+                    NewsId = newsId
+                },
+                0);
+
+                await FillPageModelData(newsId);
             }
-
-            if (string.IsNullOrEmpty(senderMail) || senderMail.Length > 50 || Regex.IsMatch(senderMail, @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$") is false)
+            catch (Exception e)
             {
+                await _logService.AddError(e);
                 RedirectToPage(pageName: "Index");
-                return;
             }
-
-            if (string.IsNullOrEmpty(comment) || comment.Length > 500)
-            {
-                RedirectToPage(pageName: "Index");
-                return;
-            }
-
-            await _commentService.Add(new Comment()
-            {
-                Text = newCommentText,
-                SenderName = senderNameText,
-                SenderMail = senderMailText,
-                NewsId = newsId
-            },
-            0);
-
-            await FillPageModelData(newsId);
         }
 
         private async Task FillPageModelData(int newsId)
         {
-            var desiredNewsResult = await _newsService.GetById(newsId);
-
-            if (desiredNewsResult.IsSuccessful is false)
+            try
             {
-                RedirectToPage(pageName: "Index");
-                return;
-            }
+                var desiredNewsResult = await _newsService.GetById(newsId);
 
-            DesiredNews = desiredNewsResult.Data;
-            Comments = desiredNewsResult.Data.Comments.ToList();
+                if (desiredNewsResult.IsSuccessful is false)
+                {
+                    RedirectToPage(pageName: "Index");
+                    return;
+                }
+
+                DesiredNews = desiredNewsResult.Data;
+                Comments = desiredNewsResult.Data.Comments.ToList();
+            }
+            catch (Exception e)
+            {
+                await _logService.AddError(e);
+                RedirectToPage(pageName: "Index");
+            }
         }
 
         public News DesiredNews { get; set; }

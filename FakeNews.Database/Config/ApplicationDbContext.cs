@@ -2,11 +2,6 @@
 using FakeNews.Database.Tables.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using System.IO;
-using System.Linq;
 
 namespace FakeNews.Database.Config
 {
@@ -14,9 +9,9 @@ namespace FakeNews.Database.Config
     {
 #if DEBUG
 
-        private const string ConnectionString = @"Data Source=localhost;Initial Catalog=mmhamze2_uniProjectDatabase;Integrated Security=True;Pooling=False";
+        //private const string ConnectionString = @"Data Source=localhost;Initial Catalog=mmhamze2_uniProjectDatabase;Integrated Security=True;Pooling=False";
 
-        //private const string ConnectionString = @"Data Source=185.55.224.117;Initial Catalog=mmhamze2_uniProjectDatabase;Persist Security Info=True;User ID=mmhamze2_uniProjectDbOwner;Password=Leomleom19(&";
+        private const string ConnectionString = @"Data Source=185.55.224.117;Initial Catalog=mmhamze2_uniProjectDatabase;Persist Security Info=True;User ID=mmhamze2_uniProjectDbOwner;Password=Leomleom19(&";
 #else
         private const string ConnectionString = @"Data Source=127.0.0.1;Initial Catalog=mmhamze2_uniProjectDatabase;Persist Security Info=True;User ID=mmhamze2_uniProjectDbOwner;Password=Leomleom19(&";
 #endif
@@ -68,6 +63,7 @@ namespace FakeNews.Database.Config
         public DbSet<News> News { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<Log> Logs { get; set; }
 
         #endregion
 
