@@ -81,7 +81,7 @@ article, span, p, h1, h2, h3, h4, h5, h6, strong, a, em, label {
 
 @font-face {
     font-family: 'IranSans';
-    src: url('..\Fonts\IRANSansWeb_Light.woff2') format('woff2'), url('..\Fonts\IRANSansWeb_Bold.woff2') format('woff2');
+    src: url('~\Fonts\IRANSansWeb_Light.woff2') format('woff2'), url('~\Fonts\IRANSansWeb_Bold.woff2') format('woff2');
 }
 
 .c-comments__item {

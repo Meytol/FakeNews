@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Net.Http.Headers;
 using SeoTags;
 using System;
 using System.Collections.Generic;
@@ -34,8 +35,7 @@ namespace FakeNews.View
             services.AddDbContext<ApplicationDbContext>();
 
             services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                ;
+                .AddEntityFrameworkStores<ApplicationDbContext>();
 
             FakeNews.Services.Helper.IocHandler.ResolveUnitOfWorkIoc(services);
             FakeNews.Services.Helper.IocHandler.ResolveServicesIoc(services);
@@ -61,23 +61,31 @@ namespace FakeNews.View
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment() || true)
+            if (env.IsDevelopment()|| true)
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
+                app.UseStaticFiles();
             }
             else
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
+
+                app.UseStaticFiles(new StaticFileOptions()
+                {
+                    OnPrepareResponse = ctx =>
+                    {
+                        var durationInSeconds = TimeSpan.FromDays(30).TotalSeconds;
+                        ctx.Context.Response.Headers[HeaderNames.CacheControl] =
+                            "public,max-age=" + durationInSeconds;
+                    }
+                });
             }
 
             //app.UseHttpsRedirection();
-            app.UseStaticFiles();
 
             app.UseRouting();
 
