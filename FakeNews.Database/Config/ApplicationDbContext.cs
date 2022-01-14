@@ -9,9 +9,9 @@ namespace FakeNews.Database.Config
     {
 #if DEBUG
 
-        //private const string ConnectionString = @"Data Source=localhost;Initial Catalog=mmhamze2_uniProjectDatabase;Integrated Security=True;Pooling=False";
+        private const string ConnectionString = @"Data Source=127.0.0.1;Initial Catalog=mmhamze2_uniProjectDatabase;Persist Security Info=True;User ID=mmhamze2_uniProjectDbOwner;Password=Leomleom19(&";
 
-        private const string ConnectionString = @"Data Source=185.55.224.117;Initial Catalog=mmhamze2_uniProjectDatabase;Persist Security Info=True;User ID=mmhamze2_uniProjectDbOwner;Password=Leomleom19(&";
+        //private const string ConnectionString = "Data Source=185.55.224.117;Initial Catalog=mmhamze2_uniProjectDatabase;Persist Security Info=True;User ID=mmhamze2_uniProjectDbOwner;Password=Leomleom19(&";
 #else
         private const string ConnectionString = @"Data Source=127.0.0.1;Initial Catalog=mmhamze2_uniProjectDatabase;Persist Security Info=True;User ID=mmhamze2_uniProjectDbOwner;Password=Leomleom19(&";
 #endif
@@ -24,7 +24,6 @@ namespace FakeNews.Database.Config
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(ConnectionString);
-            //optionsBuilder.UseInMemoryDatabase(databaseName: "FakeNewsDb");
 
             base.OnConfiguring(optionsBuilder);
         }
@@ -44,6 +43,13 @@ namespace FakeNews.Database.Config
                 .HasForeignKey(e => e.CategoryId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<News>()
+                .HasOne(e => e.Author)
+                .WithMany(e => e.AuthorNews)
+                .HasForeignKey(e => e.AuthorId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<Category>()
                 .HasOne(e => e.ParentCategory)

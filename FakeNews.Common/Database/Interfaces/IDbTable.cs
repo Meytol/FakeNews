@@ -17,12 +17,12 @@ namespace FakeNews.Common.Database.Interfaces
     // ReSharper disable once InconsistentNaming
     public abstract class IDbTable : IDbTableProperties
     {
-        public int Id { get; set; }
-        public Guid PublicId { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public int CreatorId { get; set; }
-        public DateTime? ModifiedOn { get; set; }
-        public int? ModifierId { get; set; }
+        public virtual int Id { get; set; }
+        public virtual Guid PublicId { get; set; }
+        public virtual DateTime CreatedOn { get; set; }
+        public virtual int CreatorId { get; set; }
+        public virtual DateTime? ModifiedOn { get; set; }
+        public virtual int? ModifierId { get; set; }
 
         public bool IsDeleted { get; set; }
     }

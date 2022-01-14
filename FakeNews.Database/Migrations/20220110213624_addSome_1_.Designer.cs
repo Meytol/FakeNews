@@ -4,14 +4,16 @@ using FakeNews.Database.Config;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FakeNews.Database.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220110213624_addSome_1_")]
+    partial class addSome_1_
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -324,7 +326,7 @@ namespace FakeNews.Database.Migrations
                             CreatorId = 0,
                             IsDeleted = false,
                             NewsId = 1,
-                            PublicId = new Guid("2e05af40-6215-434b-ab36-1f6bb8c52487"),
+                            PublicId = new Guid("0dd08bf7-00f6-43b6-aa88-ebda3bee9f30"),
                             SenderMail = "m.hamzeh@yahoo.com",
                             SenderName = "محمدمهدی حمزه",
                             Status = 1,
@@ -337,7 +339,7 @@ namespace FakeNews.Database.Migrations
                             CreatorId = 0,
                             IsDeleted = false,
                             NewsId = 1,
-                            PublicId = new Guid("6c74622b-79ec-4e92-bb96-a0c64afe97dc"),
+                            PublicId = new Guid("796b29ae-f9ae-4889-849b-f8b4b3c19a55"),
                             SenderMail = "m.hamzeh@yahoo.com",
                             SenderName = "محمدمهدی حمزه",
                             Status = 1,
@@ -350,7 +352,7 @@ namespace FakeNews.Database.Migrations
                             CreatorId = 0,
                             IsDeleted = false,
                             NewsId = 1,
-                            PublicId = new Guid("51e2c11f-e885-47d6-8022-48fd6b9af4bf"),
+                            PublicId = new Guid("c9bff3b3-752e-4597-b3d8-3b563c76e252"),
                             SenderMail = "m.hamzeh@yahoo.com",
                             SenderName = "محمدمهدی حمزه",
                             Status = 1,
@@ -408,7 +410,7 @@ namespace FakeNews.Database.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "733853f4-1af7-466a-b28b-4360db0f456a",
+                            ConcurrencyStamp = "6c2ac2de-b372-44b6-85f4-97ce38d11f9d",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatorId = 1,
                             IsDeleted = false,
@@ -419,7 +421,7 @@ namespace FakeNews.Database.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "3ed1a906-15b3-4987-aa7d-2a17324b51cc",
+                            ConcurrencyStamp = "6afe7826-438c-443c-851d-279956a6b161",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatorId = 1,
                             IsDeleted = false,
@@ -512,28 +514,6 @@ namespace FakeNews.Database.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "4ed3f644-0001-4a11-879d-ae3ad17edcaf",
-                            CreatedOn = new DateTime(1997, 2, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CreatorId = 1,
-                            Email = "mohammadmahdi.hamzeh@yahoo.com",
-                            EmailConfirmed = true,
-                            IsDeleted = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "mohammadmahdi.hamzeh@yahoo.com",
-                            NormalizedUserName = "MM_Hamzeh",
-                            PasswordHash = "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8",
-                            PhoneNumber = "09386114201",
-                            PhoneNumberConfirmed = true,
-                            PublicId = new Guid("57d8f436-99e8-43a3-8751-8efcd0b6b3ab"),
-                            TwoFactorEnabled = false,
-                            UserName = "MM_Hamzeh"
-                        });
                 });
 
             modelBuilder.Entity("FakeNews.Database.Tables.Log", b =>
@@ -6272,7 +6252,7 @@ namespace FakeNews.Database.Migrations
                     b.HasOne("FakeNews.Database.Tables.Identity.User", "Author")
                         .WithMany("AuthorNews")
                         .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("FakeNews.Database.Tables.Category", "Category")

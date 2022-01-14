@@ -11,24 +11,24 @@ namespace FakeNews.Database.Config
     {
         internal static void Seed(this ModelBuilder builder)
         {
-            //builder.Entity<User>().HasData(
-            //    new User()
-            //    {
-            //        Id = 1,
-            //        Email = "mohammadmahdi.hamzeh@yahoo.com",
-            //        UserName = "MM_Hamzeh",
-            //        CreatedOn = DateTime.Now,
-            //        IsDeleted = false,
-            //        LockoutEnabled = false,
-            //        PublicId = Guid.Parse("57D8F436-99E8-43A3-8751-8EFCD0B6B3AB"),
-            //        NormalizedEmail = "mohammadmahdi.hamzeh@yahoo.com".Normalize(),
-            //        NormalizedUserName = "MM_Hamzeh".Normalize(),
-            //        PhoneNumber = "09386114201",
-            //        EmailConfirmed = true,
-            //        PhoneNumberConfirmed = true,
-            //        CreatorId = 1,
-            //        PasswordHash = "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8"
-            //    });
+            builder.Entity<User>().HasData(
+                new User()
+                {
+                    Id = 1,
+                    Email = "mohammadmahdi.hamzeh@yahoo.com",
+                    UserName = "MM_Hamzeh",
+                    CreatedOn = new DateTime(1997, 02, 19),
+                    IsDeleted = false,
+                    LockoutEnabled = false,
+                    PublicId = Guid.Parse("57D8F436-99E8-43A3-8751-8EFCD0B6B3AB"),
+                    NormalizedEmail = "mohammadmahdi.hamzeh@yahoo.com".Normalize(),
+                    NormalizedUserName = "MM_Hamzeh".Normalize(),
+                    PhoneNumber = "09386114201",
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true,
+                    CreatorId = 1,
+                    PasswordHash = "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8"
+                });
 
             builder.Entity<Role>().HasData(
                 new Role()
@@ -5716,7 +5716,7 @@ namespace FakeNews.Database.Config
                     SenderMail = "m.hamzeh@yahoo.com",
                     Text = "کامنت اول",
                     CreatedOn = DateTime.Parse("1/6/2022 17:26:00"),
-                    PublicId = Guid.NewGuid()
+                    PublicId = Guid.Parse("2E05AF40-6215-434B-AB36-1F6BB8C52487")
                 },
                 new Comment()
                 {
@@ -5726,7 +5726,7 @@ namespace FakeNews.Database.Config
                     SenderMail = "m.hamzeh@yahoo.com",
                     Text = "کامنت دوم",
                     CreatedOn = DateTime.Parse("1/6/2022 17:26:00"),
-                    PublicId = Guid.NewGuid()
+                    PublicId = Guid.Parse("6C74622B-79EC-4E92-BB96-A0C64AFE97DC")
                 },
                 new Comment()
                 {
@@ -5736,7 +5736,7 @@ namespace FakeNews.Database.Config
                     SenderMail = "m.hamzeh@yahoo.com",
                     Text = "کامنت سوم",
                     CreatedOn = DateTime.Parse("1/6/2022 17:26:00"),
-                    PublicId = Guid.NewGuid()
+                    PublicId = Guid.Parse("51E2C11F-E885-47D6-8022-48FD6B9AF4BF")
                 });
         }
     }

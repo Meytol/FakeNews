@@ -4,14 +4,16 @@ using FakeNews.Database.Config;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FakeNews.Database.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220114102020_fi_guid")]
+    partial class fi_guid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -408,7 +410,7 @@ namespace FakeNews.Database.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "733853f4-1af7-466a-b28b-4360db0f456a",
+                            ConcurrencyStamp = "d04b9932-cad7-43e6-a67a-729c99f2a719",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatorId = 1,
                             IsDeleted = false,
@@ -419,7 +421,7 @@ namespace FakeNews.Database.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "3ed1a906-15b3-4987-aa7d-2a17324b51cc",
+                            ConcurrencyStamp = "30ed41ca-53af-406e-97c5-296b600a8858",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatorId = 1,
                             IsDeleted = false,
@@ -518,7 +520,7 @@ namespace FakeNews.Database.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "4ed3f644-0001-4a11-879d-ae3ad17edcaf",
+                            ConcurrencyStamp = "93211cd5-f152-4c57-803c-fa37b4cd2ce0",
                             CreatedOn = new DateTime(1997, 2, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CreatorId = 1,
                             Email = "mohammadmahdi.hamzeh@yahoo.com",
@@ -6272,7 +6274,7 @@ namespace FakeNews.Database.Migrations
                     b.HasOne("FakeNews.Database.Tables.Identity.User", "Author")
                         .WithMany("AuthorNews")
                         .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("FakeNews.Database.Tables.Category", "Category")
