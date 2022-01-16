@@ -63,14 +63,6 @@ body {
     margin-bottom: 60px;
 }
 
-article, span, p, h1, h2, h3, h4, h5, h6, strong, a, em, label {
-    font-family: 'IranSans', 'Tahoma', 'Arial', 'sans-serif';
-    font-weight: 300;
-    font-style: normal;
-    font-size: 17px;
-    line-height: 36px;
-}
-
 .footer {
   position: absolute;
   bottom: 0;
@@ -82,6 +74,14 @@ article, span, p, h1, h2, h3, h4, h5, h6, strong, a, em, label {
 @font-face {
     font-family: 'IranSans';
     src: url('~\Fonts\IRANSansWeb_Light.woff2') format('woff2'), url('~\Fonts\IRANSansWeb_Bold.woff2') format('woff2');
+}
+
+article, span, p, h1, h2, h3, h4, h5, h6, strong, a, em, label {
+    font-family: 'IranSans', 'Tahoma', 'Arial', 'sans-serif';
+    font-weight: 300;
+    font-style: normal;
+    font-size: 17px;
+    line-height: 36px;
 }
 
 .c-comments__item {
