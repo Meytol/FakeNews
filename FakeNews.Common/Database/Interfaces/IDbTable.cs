@@ -34,7 +34,7 @@ namespace FakeNews.Common.Database.Interfaces
         [NotMapped]
         public PersianDateTime PersianCreatedOn => new PersianDateTime(CreatedOn);
         [NotMapped]
-        public PersianDateTime PersianModifiedOn => new PersianDateTime(ModifiedOn);
+        public PersianDateTime PersianModifiedOn => new PersianDateTime(ModifiedOn ?? CreatedOn);
 
         public bool IsDeleted { get; set; }
     }

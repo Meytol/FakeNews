@@ -35,7 +35,7 @@ namespace FakeNews.View.Areas.Admin.Controllers
         }
 
         [HttpPatch]
-        public async Task ApproveComment(int commentId)
+        public async Task ApproveComment( int commentId)
         {
             var comment = await _commentsRepo.SelectById(commentId);
 
@@ -54,7 +54,7 @@ namespace FakeNews.View.Areas.Admin.Controllers
         }
 
         [HttpPatch]
-        public async Task RejectComment(int commentId)
+        public async Task RejectComment( int commentId)
         {
             var comment = await _commentsRepo.SelectById(commentId);
 
