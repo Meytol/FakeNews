@@ -1,0 +1,195 @@
+﻿@using FakeNews.Common.Database.Enums
+@using FakeNews.Database.Tables
+@model IEnumerable<Comment>
+
+@{
+    ViewData["Title"] = "مدیریت کامنت ها";
+    Layout = "_AdminLayout";
+}
+
+<h1>لیست کامنت ها</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Text)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SenderName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PersianCreatedOn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PersianModifiedOn)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Text)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SenderName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PersianCreatedOn)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PersianModifiedOn)
+                </td>
+                <td>
+                    @if (item.Status == CommentStatus.Pending || item.Status == CommentStatus.Rejected)
+                    {
+                        <input type="button" class="btn btn-success" value="تأیید"
+                       onclick="approveComment(@item.Id)" />
+                    }
+                    else if (item.Status == CommentStatus.Pending || item.Status == CommentStatus.Accepted)
+                    {
+                        <input type="button" class="btn btn-danger" value="رد"
+                       onclick="rejectComment(@item.Id)" />
+                    }
+                    <input type="button" class="btn btn-danger" value="swalTest"
+                       onclick="swalTest()" />
+                    <a asp-action="Delete" asp-route-id="@item.Id">حذف</a>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+@section Scripts{
+<script>
+    function approveComment(commentId){
+        $.ajax(
+            {
+                url: "/ApproveComment",
+                cache: false
+                data: commentId,
+                type: "patch",
+                dataType: Number,
+                success: function(result){
+                        Swal.fire({
+                          icon: 'success',
+                          text: 'عملیات با موفقیت انجام شد',
+                          timer: 2000,
+                          position: 'top-end',
+                          didOpen: () => {
+                                Swal.showLoading()
+                                const b = Swal.getHtmlContainer().querySelector('b')
+                                timerInterval = setInterval(() => {
+                                  b.textContent = Swal.getTimerLeft()
+                                }, 100)
+                              },
+                              willClose: () => {
+                                clearInterval(timerInterval)
+                              }
+                        });
+                },
+                error: function(xhr,status,error){
+                    Swal.fire({
+                          icon: 'error',
+                          title: status,
+                          text: error,
+                          timer: 2000,
+                          position: 'top-end',
+                          didOpen: () => {
+                                Swal.showLoading()
+                                const b = Swal.getHtmlContainer().querySelector('b')
+                                timerInterval = setInterval(() => {
+                                  b.textContent = Swal.getTimerLeft()
+                                }, 100)
+                              },
+                              willClose: () => {
+                                clearInterval(timerInterval)
+                              }
+                        });
+            });
+    }
+
+    function rejectComment(commentId){
+        $.ajax(
+            {
+                url: "/RejectComment",
+                cache: false
+                data: commentId,
+                type: "patch",
+                dataType: Number,
+                success: function(result){
+                        Swal.fire({
+                          icon: 'success',
+                          text: 'عملیات با موفقیت انجام شد',
+                          timer: 2000,
+                          position: 'top-end',
+                          didOpen: () => {
+                                Swal.showLoading()
+                                const b = Swal.getHtmlContainer().querySelector('b')
+                                timerInterval = setInterval(() => {
+                                  b.textContent = Swal.getTimerLeft()
+                                }, 100)
+                              },
+                              willClose: () => {
+                                clearInterval(timerInterval)
+                              }
+                        });
+                },
+                error: function(xhr,status,error){
+                    Swal.fire({
+                          icon: 'error',
+                          title: status,
+                          text: error,
+                          timer: 2000,
+                          position: 'top-end',
+                          didOpen: () => {
+                                Swal.showLoading()
+                                const b = Swal.getHtmlContainer().querySelector('b')
+                                timerInterval = setInterval(() => {
+                                  b.textContent = Swal.getTimerLeft()
+                                }, 100)
+                              },
+                              willClose: () => {
+                                clearInterval(timerInterval)
+                              }
+                        });
+                }
+            });
+    }
+
+    function swalTest(){
+        Swal.fire({
+                          icon: 'success',
+                          text: 'عملیات با موفقیت انجام شد',
+                          timer: 2000,
+                          position: 'top-end',
+                          didOpen: () => {
+                                Swal.showLoading()
+                                const b = Swal.getHtmlContainer().querySelector('b')
+                                timerInterval = setInterval(() => {
+                                  b.textContent = Swal.getTimerLeft()
+                                }, 100)
+                              },
+                              willClose: () => {
+                                clearInterval(timerInterval)
+                              }
+                        });
+    }
+</script>
+}

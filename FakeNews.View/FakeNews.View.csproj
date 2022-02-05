@@ -11,6 +11,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\lib\sw\**" />
+    <Content Remove="wwwroot\lib\sw\**" />
+    <EmbeddedResource Remove="wwwroot\lib\sw\**" />
+    <None Remove="wwwroot\lib\sw\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="Pages\Shared\_SidebarAd.cshtml" />
   </ItemGroup>
 
