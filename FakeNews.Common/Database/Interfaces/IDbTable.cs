@@ -16,9 +16,9 @@ namespace FakeNews.Common.Database.Interfaces
         bool IsDeleted { get; set; }
 
         [NotMapped]
-        PersianDateTime PersianCreatedOn => new(CreatedOn);
+        PersianDateTime PersianCreatedOn => new PersianDateTime(CreatedOn);
         [NotMapped]
-        PersianDateTime PersianModifiedOn => new(ModifiedOn);
+        PersianDateTime PersianModifiedOn => new PersianDateTime(ModifiedOn);
     }
 
     // ReSharper disable once InconsistentNaming
@@ -32,9 +32,9 @@ namespace FakeNews.Common.Database.Interfaces
         public virtual int? ModifierId { get; set; }
 
         [NotMapped]
-        public PersianDateTime PersianCreatedOn => new(CreatedOn);
+        public PersianDateTime PersianCreatedOn => new PersianDateTime(CreatedOn);
         [NotMapped]
-        public PersianDateTime PersianModifiedOn => new(ModifiedOn);
+        public PersianDateTime PersianModifiedOn => new PersianDateTime(ModifiedOn);
 
         public bool IsDeleted { get; set; }
     }
