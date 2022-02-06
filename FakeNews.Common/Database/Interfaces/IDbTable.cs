@@ -1,4 +1,5 @@
-﻿using MD.PersianDateTime;
+﻿using FakeNews.Common.StaticMethods;
+using MD.PersianDateTime;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -16,9 +17,9 @@ namespace FakeNews.Common.Database.Interfaces
         bool IsDeleted { get; set; }
 
         [NotMapped]
-        PersianDateTime PersianCreatedOn => new PersianDateTime(CreatedOn);
+        PersianDateTime PersianCreatedOn => CreatedOn.AsPersianDateTime();
         [NotMapped]
-        PersianDateTime PersianModifiedOn => new PersianDateTime(ModifiedOn);
+        PersianDateTime PersianModifiedOn => (ModifiedOn ?? CreatedOn).AsPersianDateTime();
     }
 
     // ReSharper disable once InconsistentNaming
@@ -32,9 +33,9 @@ namespace FakeNews.Common.Database.Interfaces
         public virtual int? ModifierId { get; set; }
 
         [NotMapped]
-        public PersianDateTime PersianCreatedOn => new PersianDateTime(CreatedOn);
+        public PersianDateTime PersianCreatedOn => CreatedOn.AsPersianDateTime();
         [NotMapped]
-        public PersianDateTime PersianModifiedOn => new PersianDateTime(ModifiedOn ?? CreatedOn);
+        public PersianDateTime PersianModifiedOn => (ModifiedOn ?? CreatedOn).AsPersianDateTime();
 
         public bool IsDeleted { get; set; }
     }

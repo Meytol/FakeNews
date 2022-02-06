@@ -1,0 +1,60 @@
+﻿@{
+    ViewData["Title"] = "قسمت ادمین";
+}
+
+<div class="row">
+
+    <div class="col col-4">
+        <div class="card">
+            <div class="card-header">
+                مدیریت اخبار
+            </div>
+            <div class="card-body">
+                <a asp-area="Admin" asp-controller="News" asp-action="Index">
+                    اخبار
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col col-4">
+        <div class="card">
+            <div class="card-header">
+                مدیریت نظرات
+            </div>
+            <div class="card-body">
+                <a asp-area="Admin" asp-controller="Comments" asp-action="Index">
+                    نظرات
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col col-4">
+        <div class="card">
+            <div class="card-header">
+                مدیریت دسته بندی ها
+            </div>
+            <div class="card-body">
+                <a asp-area="Admin" asp-controller="Categories" asp-action="Index">
+                    دسته بندی ها
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col col-4">
+        <div class="card">
+            <div class="card-header">
+                مدیریت لاگ ها
+            </div>
+            <div class="card-body">
+                <a asp-area="Admin" asp-controller="Logs" asp-action="Index">
+                    لاگ ها
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
+

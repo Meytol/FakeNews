@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -46,19 +44,15 @@ namespace FakeNews.View.Areas.Admin.Controllers
             return View(category);
         }
 
-        // GET: Admin/Categories/Create
         public IActionResult Create()
         {
-            ViewData["ParentCategoryId"] = new SelectList(_context.Categories, "Id", "Id");
+            ViewData["ParentCategoryId"] = new SelectList(_context.Categories, "Id", "TitleFa");
             return View();
         }
 
-        // POST: Admin/Categories/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TitleEn,TitleFa,ParentCategoryId,Id,PublicId,CreatedOn,CreatorId,ModifiedOn,ModifierId,IsDeleted")] Category category)
+        public async Task<IActionResult> Create([Bind("TitleEn,TitleFa,ParentCategoryId")] Category category)
         {
             if (ModelState.IsValid)
             {
@@ -66,7 +60,7 @@ namespace FakeNews.View.Areas.Admin.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ParentCategoryId"] = new SelectList(_context.Categories, "Id", "Id", category.ParentCategoryId);
+            ViewData["ParentCategoryId"] = new SelectList(_context.Categories, "Id", "TitleFa", category.ParentCategoryId);
             return View(category);
         }
 
@@ -83,16 +77,13 @@ namespace FakeNews.View.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            ViewData["ParentCategoryId"] = new SelectList(_context.Categories, "Id", "Id", category.ParentCategoryId);
+            ViewData["ParentCategoryId"] = new SelectList(_context.Categories, "Id", "TitleFa", category.ParentCategoryId);
             return View(category);
         }
 
-        // POST: Admin/Categories/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TitleEn,TitleFa,ParentCategoryId,Id,PublicId,CreatedOn,CreatorId,ModifiedOn,ModifierId,IsDeleted")] Category category)
+        public async Task<IActionResult> Edit(int id, [Bind("TitleEn,TitleFa,ParentCategoryId,Id")] Category category)
         {
             if (id != category.Id)
             {
@@ -119,11 +110,10 @@ namespace FakeNews.View.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ParentCategoryId"] = new SelectList(_context.Categories, "Id", "Id", category.ParentCategoryId);
+            ViewData["ParentCategoryId"] = new SelectList(_context.Categories, "Id", "TitleFa", category.ParentCategoryId);
             return View(category);
         }
 
-        // GET: Admin/Categories/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -142,7 +132,6 @@ namespace FakeNews.View.Areas.Admin.Controllers
             return View(category);
         }
 
-        // POST: Admin/Categories/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

@@ -1,17 +1,16 @@
 ﻿@model FakeNews.Database.Tables.News
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "تغییر اطلاعات خبر";
     Layout = "_AdminLayout";
 }
 
-<h1>Edit</h1>
+<h1>تغییر اطلاعات خبر</h1>
 
-<h4>News</h4>
-<hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
+            <input type="hidden" asp-for="Id" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="MainImageUri" class="control-label"></label>
@@ -29,11 +28,6 @@
                 <span asp-validation-for="HeadLine" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Body" class="control-label"></label>
-                <input asp-for="Body" class="form-control" />
-                <span asp-validation-for="Body" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="PublishDate" class="control-label"></label>
                 <input asp-for="PublishDate" class="form-control" />
                 <span asp-validation-for="PublishDate" class="text-danger"></span>
@@ -44,62 +38,31 @@
                 <span asp-validation-for="Keywords" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SeenCount" class="control-label"></label>
-                <input asp-for="SeenCount" class="form-control" />
-                <span asp-validation-for="SeenCount" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AuthorId" class="control-label"></label>
-                <select asp-for="AuthorId" class="form-control" asp-items="ViewBag.AuthorId"></select>
-                <span asp-validation-for="AuthorId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="CategoryId" class="control-label"></label>
                 <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
-            <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="PublicId" class="control-label"></label>
-                <input asp-for="PublicId" class="form-control" />
-                <span asp-validation-for="PublicId" class="text-danger"></span>
+                <label asp-for="Body" class="control-label"></label>
+                <input asp-for="Body" class="form-control" id="mytextarea" />
+                <span asp-validation-for="Body" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CreatedOn" class="control-label"></label>
-                <input asp-for="CreatedOn" class="form-control" />
-                <span asp-validation-for="CreatedOn" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatorId" class="control-label"></label>
-                <input asp-for="CreatorId" class="form-control" />
-                <span asp-validation-for="CreatorId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ModifiedOn" class="control-label"></label>
-                <input asp-for="ModifiedOn" class="form-control" />
-                <span asp-validation-for="ModifiedOn" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ModifierId" class="control-label"></label>
-                <input asp-for="ModifierId" class="form-control" />
-                <span asp-validation-for="ModifierId" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsDeleted" /> @Html.DisplayNameFor(model => model.IsDeleted)
-                </label>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="ذخیره" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">بازگشت</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        tinymce.init({
+      selector: '#mytextarea'
+    });
+    </script>
 }

@@ -1,6 +1,5 @@
 ﻿using FakeNews.Common.Database.Enums;
 using FakeNews.Database.Tables;
-using FakeNews.Services.ModelServices;
 using FakeNews.Services.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +26,7 @@ namespace FakeNews.View.Areas.Admin.Controllers
         {
             var comments = await _commentsRepo
                 .AsQueryable()
+                .Where(e => e.IsDeleted == false)
                 .OrderByDescending(e => e.CreatedOn)
                 .AsNoTracking()
                 .ToListAsync();
@@ -69,6 +69,20 @@ namespace FakeNews.View.Areas.Admin.Controllers
             }
 
             comment.Status = CommentStatus.Rejected;
+            await _unitOfWork.Save();
+        }
+
+        [HttpDelete]
+        public async Task Delete(int commentId)
+        {
+            var comment = await _commentsRepo.SelectById(commentId);
+
+            if (comment is null)
+            {
+                throw new Exception("کامنت مورد نظر پیدا نشد");
+            }
+
+            _commentsRepo.Delete(comment);
             await _unitOfWork.Save();
         }
     }

@@ -1,7 +1,10 @@
 ﻿@using FakeNews.Common.Database.Enums
 @using FakeNews.Database.Tables
+@using FakeNews.Common.StaticMethods;
 @model IEnumerable<Comment>
-
+@section Scripts{
+    <script src="~/js/Admin/Comments/index.js"></script>
+}
 @{
     ViewData["Title"] = "مدیریت کامنت ها";
     Layout = "_AdminLayout";
@@ -44,7 +47,7 @@
                     @Html.DisplayFor(modelItem => item.Text)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Status)
+                    @item.Status.GetDescription()
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.SenderName)
@@ -58,127 +61,17 @@
                 <td>
                     @if (item.Status == CommentStatus.Pending || item.Status == CommentStatus.Rejected)
                     {
-                        <input type="button" class="btn btn-success operationBtn" value="تأیید"
-                       onclick="approveComment(@item.Id)" />
+                        <input type="button" class="btn btn-success operationBtn" value="تأیید" onclick="approveComment(@item.Id)" />
                     }
                     else if (item.Status == CommentStatus.Pending || item.Status == CommentStatus.Accepted)
                     {
-                        <input type="button" class="btn btn-danger operationBtn" value="رد"
-                       onclick="rejectComment(@item.Id)" />
+                        <input type="button" class="btn btn-warning operationBtn" value="رد" onclick="rejectComment(@item.Id)" />
                     }
-                    <a asp-action="Delete" asp-route-id="@item.Id">حذف</a>
+
+                    <input type="button" class="btn btn-danger operationBtn" value="حذف" onclick="deleteComment(@item.Id)" />
                 </td>
             </tr>
         }
 
     </tbody>
 </table>
-
-@section Scripts{
-<script>
-
-    
-    function approveComment(id){
-    $.ajax(
-            {
-                url: "/ApproveComment",
-                data: {commentId: id},
-                type: "PATCH",
-                success: function(result){
-                        Swal.fire({
-                          icon: 'success',
-                          text: 'عملیات با موفقیت انجام شد',
-                          timer: 2000,
-                          position: 'top-end',
-                          didOpen: () => {
-                                Swal.showLoading()
-                                const b = Swal.getHtmlContainer().querySelector('b')
-                                timerInterval = setInterval(() => {
-                                  b.textContent = Swal.getTimerLeft()
-                                }, 100)
-                              },
-                              willClose: () => {
-                                clearInterval(timerInterval)
-                              }
-                        });
-                },
-                error: function(xhr,status,error){
-                    Swal.fire({
-                          icon: 'error',
-                          title: status,
-                          text: error,
-                          timer: 2000,
-                          position: 'top-end',
-                          didOpen: () => {
-                                Swal.showLoading()
-                                const b = Swal.getHtmlContainer().querySelector('b')
-                                timerInterval = setInterval(() => {
-                                  b.textContent = Swal.getTimerLeft()
-                                }, 100)
-                              },
-                              willClose: () => {
-                                clearInterval(timerInterval)
-                              }
-                        });
-            }
-            });
-
-                        return 0;
-    }
-
-    function rejectComment(id){
-        $.ajax(
-            {
-                url: "/RejectComment",
-                data: {commentId: id},
-                cache: false,
-                type: "POST",
-                dataType: Number,
-                success: function(result){
-                        Swal.fire({
-                          icon: 'success',
-                          text: 'عملیات با موفقیت انجام شد',
-                          timer: 2000,
-                          position: 'top-end',
-                          didOpen: () => {
-                                Swal.showLoading()
-                                const b = Swal.getHtmlContainer().querySelector('b')
-                                timerInterval = setInterval(() => {
-                                  b.textContent = Swal.getTimerLeft()
-                                }, 100)
-                              },
-                              willClose: () => {
-                                clearInterval(timerInterval)
-                              }
-                        });
-                },
-                error: function(xhr,status,error){
-                    Swal.fire({
-                          icon: 'error',
-                          title: status,
-                          text: error,
-                          timer: 2000,
-                          position: 'top-end',
-                          didOpen: () => {
-                                Swal.showLoading()
-                                const b = Swal.getHtmlContainer().querySelector('b')
-                                timerInterval = setInterval(() => {
-                                  b.textContent = Swal.getTimerLeft()
-                                }, 100)
-                              },
-                              willClose: () => {
-                                clearInterval(timerInterval)
-                              }
-                        });
-                }
-            });
-
-
-                        return 0;
-    }
-
-
-
-
-</script>
-}

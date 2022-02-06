@@ -61,4 +61,10 @@
     <None Include="Pages\Shared\_SidebarAd.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="wwwroot\js\Admin\Comments\index.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

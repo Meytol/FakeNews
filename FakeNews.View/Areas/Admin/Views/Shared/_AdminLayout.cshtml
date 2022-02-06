@@ -5,6 +5,7 @@
     <link href="~/lib/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
 
     <link href="~/css/site.css" rel="stylesheet" />
+    <script src="https://cdn.tiny.cloud/1/4lni2boxirfo3951squw2xcacakjxq5nkb2euo3rwtzyflgs/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
     <title>
         @ViewData["Title"]
     </title>
@@ -28,7 +29,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-page="/Index" asp-fragment="Categories">دسته بندی ها</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">قوانین</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">سایت اصلی</a>
                         </li>
                     </ul>
                 </div>
@@ -44,7 +45,7 @@
     <footer class="border-top footer text-muted">
         <div class="container">
             نوشته شده توسط محمدمهدی حمزه
-            <a asp-area="" asp-page="/Privacy">قوانین</a>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">سایت اصلی</a>
         </div>
     </footer>
 

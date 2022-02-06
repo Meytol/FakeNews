@@ -20,14 +20,14 @@ namespace FakeNews.View.Areas.Admin.Controllers
             _context = context;
         }
 
-        // GET: Admin/News
+
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.News.Include(n => n.Author).Include(n => n.Category);
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Admin/News/Details/5
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -47,29 +47,31 @@ namespace FakeNews.View.Areas.Admin.Controllers
             return View(news);
         }
 
-        // GET: Admin/News/Create
+
         public IActionResult Create()
         {
-            ViewData["AuthorId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id");
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "TitleFa");
             return View();
         }
 
-        // POST: Admin/News/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MainImageUri,Title,HeadLine,Body,PublishDate,Keywords,SeenCount,AuthorId,CategoryId,Id,PublicId,CreatedOn,CreatorId,ModifiedOn,ModifierId,IsDeleted")] News news)
+        public async Task<IActionResult> Create([Bind("MainImageUri,Title,HeadLine,Body,PublishDate,Keywords,CategoryId")] News news)
         {
+            news.AuthorId = HttpContext.User.Identity.IsAuthenticated
+                ? 1
+                : 0;
+
+            news.SeenCount = 0;
+            news.CreatedOn = DateTime.Now;
+
             if (ModelState.IsValid)
             {
                 _context.Add(news);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AuthorId"] = new SelectList(_context.Users, "Id", "Id", news.AuthorId);
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id", news.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "TitleFa", news.CategoryId);
             return View(news);
         }
 
@@ -86,22 +88,20 @@ namespace FakeNews.View.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            ViewData["AuthorId"] = new SelectList(_context.Users, "Id", "Id", news.AuthorId);
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id", news.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "TitleFa", news.CategoryId);
             return View(news);
         }
 
-        // POST: Admin/News/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MainImageUri,Title,HeadLine,Body,PublishDate,Keywords,SeenCount,AuthorId,CategoryId,Id,PublicId,CreatedOn,CreatorId,ModifiedOn,ModifierId,IsDeleted")] News news)
+        public async Task<IActionResult> Edit(int id, [Bind("MainImageUri,Title,HeadLine,Body,PublishDate,Keywords,CategoryId,Id")] News news)
         {
             if (id != news.Id)
             {
                 return NotFound();
             }
+
+            news.ModifiedOn = DateTime.Now;
 
             if (ModelState.IsValid)
             {
@@ -123,12 +123,11 @@ namespace FakeNews.View.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AuthorId"] = new SelectList(_context.Users, "Id", "Id", news.AuthorId);
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Id", news.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "TitleFa", news.CategoryId);
             return View(news);
         }
 
-        // GET: Admin/News/Delete/5
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -148,7 +147,7 @@ namespace FakeNews.View.Areas.Admin.Controllers
             return View(news);
         }
 
-        // POST: Admin/News/Delete/5
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
